@@ -24,7 +24,7 @@ def build_data_array(path, tag):
         for row_idx in range(50000):
             for col_idx in range(1, 29):
                 array[row_idx][col_idx - 1] = float(train_data[row_idx][col_idx])
-            score[row_idx] = float(train_data[row_idx][28])
+            score[row_idx] = float(train_data[row_idx][29])
         return array, score
     else:
         raise()
