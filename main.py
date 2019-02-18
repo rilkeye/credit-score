@@ -19,7 +19,8 @@ train_data.save_binary('data/train.bin')
 
 # Parameters setting
 num_round = 1
-param = { 'metric':'l1'}
+param = {'objective':'regression'}
+param['metric'] = 'auc'
 
 # Train & save model as model.txt
 bst = lgb.train(params=param, train_set=train_data, num_boost_round=num_round, valid_sets=None)
