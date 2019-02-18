@@ -28,6 +28,7 @@ bst.save_model('model/model.txt')
 # Load model and make prediction
 bst = lgb.Booster(model_file='model/model.txt')
 pred = bst.predict(test_data_array)
+pred = [round(score) for score in pred] # 将pred中的float型四舍五入
 
 # 将结果按赛制要求写入文件
 utils.write_SubmitionFile(pred, test_dataset_path)
