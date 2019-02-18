@@ -1,2 +1,7 @@
 # credit-score
-Competition code of credit score assumption in 2019.
+
+DataFountain Competition - credit score assumption 
+website: https://www.datafountain.cn/competitions/337/details/rule
+team ID: 85086
+
+------------------------------------------------------------------
