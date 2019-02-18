@@ -13,7 +13,8 @@ config file is writing...
 Contain different models we trained.  
 # Data  
 Download from : https://www.datafountain.cn/competitions/337/details/rule  
-include : test_dataset.csv , train_dataset.csv , submit__example.csv  
+include : test_dataset.csv , train_dataset.csv  
+submit_example file is omitted and you can refer Submit.csv in Data.
 result made by us named as Submit.csv , Submit1.csv , Submit2.csv and so on.  
 
 # Update 
