@@ -37,5 +37,5 @@ def write_SubmitionFile(result, id_path):
     del id[0]
 
     dataframe = pd.DataFrame({'id':id, 'score':score})
-    dataframe.to_csv('data/submit.csv',index=False, sep=',')
+    dataframe.to_csv('data/submit.csv',index=False, sep=',', encoding='utf-8')
     print('Submitfile had saved...')
