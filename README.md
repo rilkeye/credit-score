@@ -17,5 +17,8 @@ include : test_dataset.csv , train_dataset.csv
 submit_example file is omitted and you can refer Submit.csv in Data.
 result made by us named as Submit.csv , Submit1.csv , Submit2.csv and so on.  
 
-# Update 
-version 1.0更新时间:2019年2月18日17:30:38
+# Update Log
+## version 1.0更新时间:2019年2月18日17:30:38  
+首次上传
+## version 1.1更新时间:2019年2月18日22:18:44  
+更新了util.build_data_array写入score的bug，并更新新的提交结果Submit.py  
