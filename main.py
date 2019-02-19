@@ -4,48 +4,52 @@
 
 import utils
 import lightgbm as lgb
-from sklearn import metrics
 from sklearn.model_selection import train_test_split
+import train
+import matplotlib.pyplot as plt
 
-'''
-载入train_dataset.csv、test_dataset.csv文件，构建二维数组
-缺省train、test首列：“用户编码”；train末列：“信用分”
-'''
+
 train_dataset_path = 'data/train_dataset.csv'
-test_dataset_path = 'data/test_dataset.csv'
+pred_dataset_path = 'data/test_dataset.csv'
+model_path = 'model/model.txt'
 
-# data_array: shape = (50000,28); score: shape = (50000,)
-train_data_array = utils.build_data_array(train_dataset_path, tag='train')
-test_data_array  = utils.build_data_array(test_dataset_path, tag='test')
-
-# 拆分数据集 & 分离data、label
-train_dataset, validation = train_test_split(train_data_array, test_size=0.2, random_state=21)
-train_dataset, train_label = utils.split_data_and_label(train_dataset)
-valid_dataset, valid_label = utils.split_data_and_label(validation)
-
-
-# 训练集加载
-train_data = lgb.Dataset(train_dataset, label=train_label)
-train_data.save_binary('data/train.bin')
-
-# 验证集加载
-valid_data = lgb.Dataset(valid_dataset, label=valid_label, reference=train_data)
-valid_data.save_binary('data/valid.bin')
+# 数据处理
+train_dataset, train_label, valid_dataset, valid_label, test_dataset, test_label, pred_dataset \
+    = train.handle_data(train_dataset_path, pred_dataset_path)
 
 # Parameters setting
 num_round = 1000
-params = {'objective':'regression', 'metric':'auc'}
+params = {
+    'task': 'train',
+    'boosting_type': 'gbdt',  # GBDT算法为基础
+    'objective': 'regression',  # 回归任务
+    'metric': 'auc',  # 评判指标
+    'max_bin': 255,  # 大会有更准的效果,更慢的速度
+    'learning_rate': 0.05,  # 学习率
+    'num_leaves': 64,  # 大会更准,但可能过拟合
+    'max_depth': 7,  # 小数据集下限制最大深度可防止过拟合,小于0表示无限制
+    'feature_fraction': 0.8,  # 如果 feature_fraction 小于 1.0, LightGBM 将会在每次迭代中随机选择部分特征.
+                              # 例如, 如果设置为 0.8, 将会在每棵树训练之前选择 80% 的特征. 可以处理过拟合
+    'bagging_freq': 5,  # 防止过拟合
+    'bagging_fraction': 0.8,  # 防止过拟合
+    'min_data_in_leaf': 21,  # 防止过拟合
+    'min_sum_hessian_in_leaf': 3.0,  # 防止过拟合
+    'header': False  # 数据集是否带表头
+        }
 
+train.train(train_dataset, train_label, valid_dataset, valid_label, num_round, params, model_path)
 
-# Train & save model as model.txt
-bst = lgb.train(params=params, train_set=train_data, num_boost_round=num_round, valid_sets=None)
-bst.save_model('model/model.txt')
+# 用测试集进行测试
+test_pred = train.make_predtion(test_dataset, model_path)
+score = utils.give_a_mark(test_pred, test_label) # 为当前载入模型评分
+print("This Model gets score {}".format(score))
 
-# Load model and make prediction
-bst = lgb.Booster(model_file='model/model.txt')
-pred = bst.predict(test_data_array)
-pred = [int(round(score)) for score in pred] # 将pred中的float型四舍五入
+# 预测结果
+result_pred = train.make_predtion(pred_dataset,model_path)
+format_result_pred = [int(round(score)) for score in result_pred] # 将result_pred中的float型四舍五入
 
 # 将结果按赛制要求写入文件
-utils.write_SubmitionFile(pred, test_dataset_path)
-print(pred[:100])
+utils.write_SubmitionFile(format_result_pred, pred_dataset_path)
+print(format_result_pred[:100])
+
+utils.write_log(num_round, params, model_path, score) # 将训练参数、模型保存路径和模型得分写入日志文件

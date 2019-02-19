@@ -1,0 +1,16 @@
+Time : 2019-02-19 19:27:14
+Num_round : 1000
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'auc', 'max_bin': 255, 'learning_rate': 0.05, 'num_leaves': 64, 'max_depth': 7, 'min_data_in_leaf': 21, 'header': False}
+
+Score : 0.06250625445559846
+Model saved path : model/model.txt
+------------------------------------
+Time : 2019-02-19 19:29:31
+Num_round : 1000
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'auc', 'max_bin': 255, 'learning_rate': 0.05, 'num_leaves': 64, 'max_depth': 7, 'feature_fraction': 0.8, 'bagging_freq': 5, 'bagging_fraction': 0.8, 'min_data_in_leaf': 21, 'min_sum_hessian_in_leaf': 3.0, 'header': False}
+
+Score : 0.06272377466698899
+Model saved path : model/model.txt
+-----------------------------------------------------
