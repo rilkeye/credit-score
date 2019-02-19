@@ -6,6 +6,7 @@ team ID: 85086
 lightgbm : 2.2.3  
 pandas : 0.23.4  
 numpy : 1.15.4  
+sklearn  
 # Usage 
 config file is writing...  
 1、python main.py
