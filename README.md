@@ -2,7 +2,7 @@
 DataFountain Competition - credit score assumption  
 website: https://www.datafountain.cn/competitions/337/details/rule  
 team ID: 85086  
-# requirement
+# Requirement
 lightgbm : 2.2.3  
 pandas : 0.23.4  
 numpy : 1.15.4  
