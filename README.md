@@ -29,7 +29,7 @@ result made by us named as Submit.csv , Submit1.csv , Submit2.csv and so on.
 新增utils.split_data_and_label函数，用于分割训练集和验证集的data与label  
 更新并上传了新的结果
 ## version 3.0更新时间：2019年2月19日19:30:55  
-将原来main.py文件模型训练部分移植train.py，提供handle_data()，train()，make_prediction()接口  
+将原来main.py文件模型训练部分移植到train.py，提供handle_data()，train()，make_prediction()接口  
 将数据分割为训练集、验证集、测试集，6:2:2  
 新增通过测试集判断模型性能功能，判断标准参照赛制标准  
 新增训练日志功能，将每次训练参数、训练次数、时间、模型路径和结果保存在'/training log.txt'
