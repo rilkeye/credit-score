@@ -21,4 +21,9 @@ result made by us named as Submit.csv , Submit1.csv , Submit2.csv and so on.
 ## version 1.0更新时间:2019年2月18日17:30:38  
 首次上传
 ## version 1.1更新时间:2019年2月18日22:18:44  
-更新了util.build_data_array写入score的bug，并更新新的提交结果Submit.py  
+更新了utils.build_data_array函数写入label的bug，并更新新的提交结果Submit.py  
+## version 2.0更新时间:2019年2月19日11:40:01  
+新增了训练集和验证集的分割功能  
+修改了utils.build_data_array函数的返回值  
+新增了utils.split_data_and_label函数，用于分割训练集和验证集的data与label  
+更新并上传了新的结果
