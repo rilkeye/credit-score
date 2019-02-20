@@ -4,12 +4,11 @@
 
 import numpy as np
 import pandas as pd
-import time
 import csv
 
 def build_data_array(path, tag):
     '''
-
+    训练模型时，通过调用该函数构造特征数据（与信用分)矩阵。Ps：载入所有特征
     :param path: file path
     :param tag: "train" or "test"
     :return: test array : (50000, 28) ; train array : (50000, 29)
@@ -20,7 +19,7 @@ def build_data_array(path, tag):
         for line in reader:
             train_data.append(line)
 
-    del (train_data[0])  # 删除.csv文件首行id信息
+    del (train_data[0])  # 删除.csv文件首行“用户编码”信息
 
     if tag == 'pred':
         array = np.zeros(shape=(50000,28))
@@ -39,6 +38,11 @@ def build_data_array(path, tag):
         raise()
 
 def split_data_and_label(array):
+    '''
+
+    :param array: shape = (m, n)
+    :return: array.shape = (m, n-1) ; label.shape = (m,)
+    '''
     label = array[:,-1] # 取array最后一列数据
     array = np.delete(array, -1, axis=1) # del last column of array
     return array, label
@@ -65,12 +69,16 @@ def give_a_mark(pred, label):
     score = 1.0 / (1.0 + MAE)
     return score
 
-def write_log(num_round, params, model_path, score):
-    with open('training log.txt', 'a', encoding='utf-8') as f:
-        f.write('Time : ' + str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))) + '\n')
-        f.write('Num_round : {}'.format(num_round) + '\n' + '\n')
-        f.write('Params : {}'.format(params) + '\n' + '\n')
-        f.write('Score : {}'.format(score) + '\n')
-        f.write('Model saved path : {}'.format(model_path) + '\n')
-        f.write('-----------------------------------------------------' + '\n')
+def get_array_column(array, idx):
+    '''
+    :param idx: the column index we need...
+    :return:  list of some column.
+    '''
+    list = array[:,idx]
+    return list
 
+def write_log(save_path, **arg):
+    with open(save_path, 'a', encoding='utf-8') as f:
+        for i in arg:
+            f.write('\n' + i + ' : ' + str(arg[i]) + '\n')
+        f.write('-' * 50 + '\n')
