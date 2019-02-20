@@ -124,12 +124,20 @@ def get_Pearson(array):
             if idx == 0:
                 firstline = line  # 首行，特征标签行
 
-    firstline.pop()
+    del firstline[-1]
+    del firstline[0]
 
     # 计算特征Pearson相关系数
     for i in range(array.shape[1] - 1):
         feature = get_array_column(array, i)
         pearson_i = cal_Pearson(feature, score)
         Pearson[str(firstline[i])] = pearson_i
-    print(Pearson)
+
+    return Pearson
+
+        # with open('data/pearson.txt', 'a', encoding='utf-8') as f:
+        #    f.write('Pearson correlation of feature {} "{}" is : {}'.format(i, firstline[i], pearson_i))
+        #    f.write('\n')
+
+
 
