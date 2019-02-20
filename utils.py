@@ -5,6 +5,7 @@
 import numpy as np
 import pandas as pd
 import csv
+import math
 
 def build_data_array(path, tag):
     '''
@@ -19,7 +20,7 @@ def build_data_array(path, tag):
         for line in reader:
             train_data.append(line)
 
-    del (train_data[0])  # 删除.csv文件首行“用户编码”信息
+    del (train_data[0])  # 删除.csv文件首行标签信息
 
     if tag == 'pred':
         array = np.zeros(shape=(50000,28))
@@ -82,3 +83,53 @@ def write_log(save_path, **arg):
         for i in arg:
             f.write('\n' + i + ' : ' + str(arg[i]) + '\n')
         f.write('-' * 50 + '\n')
+
+# 计算特征和类的平均值
+def calcMean(x,y):
+    sum_x = sum(x)
+    sum_y = sum(y)
+    n = len(x)
+    x_mean = float(sum_x+0.0)/n
+    y_mean = float(sum_y+0.0)/n
+    return x_mean,y_mean
+
+# 计算Pearson系数
+def cal_Pearson(x,y):
+    x_mean,y_mean = calcMean(x,y) # 计算x,y向量平均值
+    n = len(x)
+    sumTop = 0.0
+    sumBottom = 0.0
+    x_pow = 0.0
+    y_pow = 0.0
+    for i in range(n):
+        sumTop += (x[i]-x_mean)*(y[i]-y_mean)
+    for i in range(n):
+        x_pow += math.pow(x[i]-x_mean,2)
+    for i in range(n):
+        y_pow += math.pow(y[i]-y_mean,2)
+    sumBottom = math.sqrt(x_pow*y_pow)
+    p = sumTop/sumBottom
+    return p
+
+def get_Pearson(array):
+    '''
+    :return: Pearson dict
+    '''
+    Pearson = {}
+    score = get_array_column(array, -1)
+    # 获取特征标签
+    with open('data/train_dataset.csv', 'r', encoding='utf-8-sig') as f:
+        reader = csv.reader(f)
+        for idx, line in enumerate(reader):
+            if idx == 0:
+                firstline = line  # 首行，特征标签行
+
+    firstline.pop()
+
+    # 计算特征Pearson相关系数
+    for i in range(array.shape[1] - 1):
+        feature = get_array_column(array, i)
+        pearson_i = cal_Pearson(feature, score)
+        Pearson[str(firstline[i])] = pearson_i
+    print(Pearson)
+
