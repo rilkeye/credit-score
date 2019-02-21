@@ -36,7 +36,7 @@ def make_predtion(dataset, model_path):
 def handle_data(train_dataset_path, pred_dataset_path):
     # data_array: shape = (50000,28)
     train_data_df = utils.load_data(train_dataset_path, tag='train')
-    train_data_df['new feature 1'] = train_data_df['当月是否景点游览'] + train_data_df['是否经常逛商场的人'] + \
+    train_data_df['进行过多少种高端消费（max：7）'] = train_data_df['当月是否景点游览'] + train_data_df['是否经常逛商场的人'] + \
                                      train_data_df['当月是否逛过福州仓山万达'] + train_data_df['当月是否到过福州山姆会员店'] + \
                                      train_data_df['当月是否看电影'] + train_data_df['当月是否景点游览'] + \
                                      train_data_df['当月是否体育场馆消费']
