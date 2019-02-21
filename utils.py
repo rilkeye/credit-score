@@ -28,7 +28,7 @@ def load_data(path, tag):
 
 def split_data_and_label(array):
     '''
-
+    输入的array需要确保label在最后一列
     :param array: shape = (m, n)
     :return: array.shape = (m, n-1) ; label.shape = (m,)
     '''

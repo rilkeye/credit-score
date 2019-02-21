@@ -3,10 +3,8 @@
 # Author : Rilke
 
 import utils
-import lightgbm as lgb
-from sklearn.model_selection import train_test_split
 import train
-import matplotlib.pyplot as plt
+import time
 
 
 train_dataset_path = 'data/train_dataset.csv'
@@ -17,26 +15,29 @@ model_path = 'model/model.txt'
 train_dataset, train_label, valid_dataset, valid_label, test_dataset, test_label, pred_dataset \
     = train.handle_data(train_dataset_path, pred_dataset_path)
 
+
 # Parameters setting
-num_round = 1000
+num_round = 1444
 params = {
     'task': 'train',
     'boosting_type': 'gbdt',  # GBDT算法为基础
     'objective': 'regression',  # 回归任务
-    'metric': 'auc',  # 评判指标
+    'metric': 'rmse',  # 评判指标
     'max_bin': 255,  # 大会有更准的效果,更慢的速度
-    'learning_rate': 0.05,  # 学习率
-    'num_leaves': 64,  # 大会更准,但可能过拟合
-    'max_depth': 7,  # 小数据集下限制最大深度可防止过拟合,小于0表示无限制
-    'feature_fraction': 0.8,  # 如果 feature_fraction 小于 1.0, LightGBM 将会在每次迭代中随机选择部分特征.
+    'learning_rate': 0.01,  # 学习率
+    'num_leaves': 40,  # 大会更准,但可能过拟合
+    'max_depth': 8,  # 小数据集下限制最大深度可防止过拟合,小于0表示无限制
+    'feature_fraction': 0.61,  # 如果 feature_fraction 小于 1.0, LightGBM 将会在每次迭代中随机选择部分特征.
                               # 例如, 如果设置为 0.8, 将会在每棵树训练之前选择 80% 的特征. 可以处理过拟合
     'bagging_freq': 5,  # 防止过拟合
-    'bagging_fraction': 0.8,  # 防止过拟合
+    'bagging_fraction': 0.75,  # 防止过拟合
     'min_data_in_leaf': 21,  # 防止过拟合
     'min_sum_hessian_in_leaf': 3.0,  # 防止过拟合
+    'n_estimator':1444,
+    'reg_alpha': 0.5,
+    'reg_lambda': 0.08,
     'header': False  # 数据集是否带表头
-        }
-
+    }
 train.train(train_dataset, train_label, valid_dataset, valid_label, num_round, params, model_path)
 
 # 用测试集进行测试
@@ -50,6 +51,9 @@ format_result_pred = [int(round(score)) for score in result_pred] # 将result_pr
 
 # 将结果按赛制要求写入文件
 utils.write_SubmitionFile(format_result_pred, pred_dataset_path)
-print(format_result_pred[:100])
+# print(format_result_pred[:100])
 
-utils.write_log(num_round, params, model_path, score) # 将训练参数、模型保存路径和模型得分写入日志文件
+
+# 将训练参数、模型保存路径和模型得分写入日志文件
+utils.write_log(save_path='training log.txt', Time=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),
+                Num_round=num_round, Params=params, Model_path=model_path, Score=score)

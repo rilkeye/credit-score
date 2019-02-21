@@ -11,6 +11,7 @@ import csv
 from sklearn import metrics as mr
 import matplotlib
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.linear_model import Ridge, RidgeCV, ElasticNet, LassoCV, LassoLarsCV
 from sklearn.model_selection import cross_val_score
 import pylab as mpl
@@ -146,6 +147,12 @@ train_data_df = utils.load_data(train_dataset_path, tag='train')
 train_data_array = train_data_df.values
 score = utils.get_array_column(train_data_array, -1)
 
+feature = train_data_df[['当月通话交往圈人数']].values
+label = train_data_df[['信用分']].values
+# print(feature, label)
+
+plt.scatter(feature, label)
+plt.show()
 
 # 计算各项特征的Pearson相关系数，返回 Dict
 # pearson = utils.get_Pearson(train_data_array)
