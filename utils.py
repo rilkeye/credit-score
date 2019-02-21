@@ -7,36 +7,23 @@ import pandas as pd
 import csv
 import math
 
-
-def build_data_array(path, tag):
+def load_data(path, tag):
     '''
-    训练模型时，通过调用该函数构造特征数据（与信用分)矩阵。Ps：载入所有特征
-    :param path: file path
-    :param tag: "train" or "test"
-    :return: test array : (50000, 28) ; train array : (50000, 29)
-    '''
-    train_data = []
-    with open(path, 'r', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        for line in reader:
-            train_data.append(line)
 
-    del (train_data[0])  # 删除.csv文件首行标签信息
+    :return: <class 'pandas.core.frame.DataFrame'>
+             [50000 rows x 28 columns] when tag == 'pred' , test文件不含“信用分”列
+             [50000 rows x 29 columns]  when tag == 'train' , train文件含“信用分”列
+    '''
+    data = pd.read_csv(path, header=0)
+    if tag == 'train':
+        dataframe = pd.get_dummies(data.iloc[:, 1:]) # 去除第一列“用户编码”数据
+        return dataframe
 
     if tag == 'pred':
-        array = np.zeros(shape=(50000,28))
-        for row_idx in range(50000):
-            for col_idx in range(1, 29):
-                array[row_idx][col_idx - 1] = float(train_data[row_idx][col_idx])
-        return array
+        dataframe = pd.get_dummies(data.iloc[:, 1:]) # 去除第一列“用户编码”数据
+        return dataframe
 
-    if tag == 'train':
-        array = np.zeros(shape=(50000,29))
-        for row_idx in range(50000):
-            for col_idx in range(1, 30):
-                array[row_idx][col_idx - 1] = float(train_data[row_idx][col_idx])
-        return array
-    else:
+    else :
         raise()
 
 def split_data_and_label(array):

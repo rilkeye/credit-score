@@ -138,17 +138,20 @@ def LassoCV():
     plt.show()
 
 
-if __name__ == '__main':
-    LassoCV()
+
+# LassoCV()
+
+train_dataset_path = 'data/train_dataset.csv'
+train_data_df = utils.load_data(train_dataset_path, tag='train')
+train_data_array = train_data_df.values
+score = utils.get_array_column(train_data_array, -1)
 
 
-    train_dataset_path = 'data/train_dataset.csv'
-    train_data_array = utils.build_data_array(train_dataset_path, tag='train')
-    score = utils.get_array_column(train_data_array, -1)
+# 计算各项特征的Pearson相关系数，返回 Dict
+# pearson = utils.get_Pearson(train_data_array)
 
-    # 计算各项特征的Pearson相关系数，返回 Dict
-    pearson = utils.get_Pearson(train_data_array)
+# 计算各项特征的互信息MI，
+# MI = utils.get_MI(train_data_array)
 
-    # 计算各项特征的互信息MI，
-    MI = utils.get_MI(train_data_array)
+
 
