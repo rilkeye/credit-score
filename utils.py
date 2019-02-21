@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import csv
 import math
+from sklearn import metrics as mr
 
 def build_data_array(path, tag):
     '''
@@ -56,7 +57,7 @@ def write_SubmitionFile(result, id_path):
     del id[0]
 
     dataframe = pd.DataFrame({'id':id, 'score':score})
-    dataframe.to_csv('data/submit2.csv',index=False, sep=',', encoding='utf-8')
+    dataframe.to_csv('data/submit.csv',index=False, sep=',', encoding='utf-8')
     print('Submitfile had saved...')
 
 def give_a_mark(pred, label):
@@ -124,14 +125,22 @@ def get_Pearson(array):
             if idx == 0:
                 firstline = line  # 首行，特征标签行
 
-    del firstline[-1]
-    del firstline[0]
+    del firstline[-1] # 删除“信用分”
+    del firstline[0] # 删除“用户编码”
 
     # 计算特征Pearson相关系数
     for i in range(array.shape[1] - 1):
         feature = get_array_column(array, i)
         pearson_i = cal_Pearson(feature, score)
         Pearson[str(firstline[i])] = pearson_i
+        if i == 14:
+            print(cal_Pearson(feature, get_array_column(array, i+1)))
+    A = np.zeros(50000,)
+    for No in range(21,28):
+        fea = get_array_column(array, i)
+        A += fea
+
+    print(cal_Pearson(A, score))
 
     return Pearson
 
@@ -139,5 +148,24 @@ def get_Pearson(array):
         #    f.write('Pearson correlation of feature {} "{}" is : {}'.format(i, firstline[i], pearson_i))
         #    f.write('\n')
 
+def get_MI(array):
+    '''
+    计算信息增益MI
+    :param array: 最后一列为label或score的矩阵
+    '''
+    score = get_array_column(array, -1)
+    # 获取特征标签
+    with open('data/train_dataset.csv', 'r', encoding='utf-8-sig') as f:
+        reader = csv.reader(f)
+        for idx, line in enumerate(reader):
+            if idx == 0:
+                firstline = line  # 首行，特征标签行
 
+    del firstline[-1]  # 删除“信用分”
+    del firstline[0]  # 删除“用户编码”
 
+    for i in range(array.shape[1] - 1):
+        feature = get_array_column(array, i)
+        MI = mr.mutual_info_score(feature, score)
+        print('MI of feature {} "{}" is : {}'.format(i, firstline[i], MI))
+    return MI
