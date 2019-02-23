@@ -23,8 +23,8 @@ pred_dataset  = pred_dataset.drop(columns=['用户编码'])
 
 
 # 特征工程
-train_dataset = processed_df(train_dataset)
-pred_dataset  = processed_df(pred_dataset)
+train_dataset = utils.processed_df(train_dataset)
+pred_dataset  = utils.processed_df(pred_dataset)
 
 
 # Parameters setting

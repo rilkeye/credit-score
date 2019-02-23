@@ -33,8 +33,8 @@ Out : Index(['用户实名制是否通过核实', '用户年龄', '是否大学�
        '当月金融理财类应用使用总次数', '当月视频播放类应用使用次数', '当月飞机类应用使用次数', '当月火车类应用使用次数',
        '当月旅游资讯类应用使用次数'],dtype='object')
 '''
-train_dataset = processed_df(train_dataset)
-pred_dataset  = processed_df(pred_dataset)
+train_dataset = utils.processed_df(train_dataset)
+pred_dataset  = utils.processed_df(pred_dataset)
 
 # parameters setting
 params = {
