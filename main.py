@@ -6,7 +6,6 @@ import utils
 import train
 import time
 import pandas as pd
-from process_dataframe import processed_df
 
 
 train_dataset_path = 'data/train_dataset.csv'
