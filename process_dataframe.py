@@ -4,8 +4,6 @@
 
 import numpy as np
 import pandas as pd
-import csv
-import math
 
 
 def normalize(df_col):
