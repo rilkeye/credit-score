@@ -26,6 +26,12 @@ def load_data(path, tag):
     else :
         raise()
 
+
+def read_data(path):
+    dataframe = pd.read_csv(path)
+    return dataframe
+
+
 def split_data_and_label(array):
     '''
     输入的array需要确保label在最后一列
