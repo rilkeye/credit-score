@@ -11,12 +11,13 @@ from process_dataframe import processed_df
 
 train_dataset_path = 'data/train_dataset.csv'
 pred_dataset_path = 'data/test_dataset.csv'
-model_path = 'model/model.txt'
+
 
 # read data
 train_dataset = pd.read_csv(train_dataset_path)
 pred_dataset  = pd.read_csv(pred_dataset_path)
 train_label = train_dataset['信用分']
+submition = pred_dataset[['用户编码']]
 train_dataset = train_dataset.drop(columns=['用户编码', '信用分'])
 pred_dataset  = pred_dataset.drop(columns=['用户编码'])
 
@@ -54,13 +55,13 @@ pred, valid_score = train.train(train_dataset, train_label, pred_dataset, params
 pred_list = pred.tolist()
 pred_format = [int(round(score)) for score in pred_list]
 score = 1 / (1 + valid_score)
+print('\n', 'This prediction gets cv score for valid is : {}'.format(score))
 
 # 将结果按赛制要求写入文件
-utils.write_SubmitionFile(pred_format, 'data/submit.csv')
-print('\n', 'This prediction gets cv score for valid is : {}'.format(score))
-# print(pred_format[:100])
-
+submition['score'] = pred_format
+submition.columns = ['id','score']
+submition.to_csv('data/submition.csv', header=True, index=False)
 
 # 将训练参数、模型保存路径和模型得分写入日志文件
 utils.write_log(save_path='training log.txt', Time=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),
-                TrainMethod='main1', Params=params, Model_path=model_path, Score=score)
+                TrainMethod='main1', Params=params, Score=score)
