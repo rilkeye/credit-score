@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
 
+
 def train(train_dataset, train_label, valid_dataset, valid_label, num_round, params, model_path):
     # 训练集加载
     train_data = lgb.Dataset(train_dataset, label=train_label)
@@ -34,6 +35,7 @@ def make_predtion(dataset, model_path):
 
     return pred
 
+
 def handle_data(train_dataset):
     # 拆分为训练集、验证集、测试集 & 分离data、label
     train_data, valid_data = train_test_split(train_dataset, test_size=0.2, random_state=21)
@@ -46,6 +48,7 @@ def handle_data(train_dataset):
     valid_data = valid_data.drop(columns=['信用分'])
     test_data = test_data.drop(columns=['信用分'])
     return train_data, train_label, valid_data, valid_label, test_data, test_label
+
 
 def train_model(train_data, train_label, pred_data, params, en_amount):
     pred_all = 0

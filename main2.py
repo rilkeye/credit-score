@@ -4,13 +4,8 @@
 
 import utils
 import train
-import time
-import numpy as np
 import pandas as pd
-import lightgbm as lgb
 from process_dataframe import processed_df
-from sklearn.model_selection import StratifiedKFold
-from sklearn.model_selection import train_test_split
 
 train_dataset_path = 'data/train_dataset.csv'
 pred_dataset_path = 'data/test_dataset.csv'
