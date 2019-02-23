@@ -5,15 +5,26 @@
 import utils
 import train
 import time
+import pandas as pd
+from process_dataframe import processed_df
 
 
 train_dataset_path = 'data/train_dataset.csv'
 pred_dataset_path = 'data/test_dataset.csv'
 model_path = 'model/model.txt'
 
-# 数据处理
-train_dataset, train_label, valid_dataset, valid_label, test_dataset, test_label, pred_dataset \
-    = train.handle_data(train_dataset_path, pred_dataset_path)
+# read data
+train_dataset = pd.read_csv(train_dataset_path)
+pred_dataset  = pd.read_csv(pred_dataset_path)
+train_dataset = train_dataset.drop(columns=['用户编码'])
+pred_dataset = pred_dataset.drop(columns=['用户编码'])
+
+# 特征工程
+train_dataset = processed_df(train_dataset)
+pred_data  = processed_df(pred_dataset)
+
+# 训练集、验证集、测试集分割
+train_data, train_label, valid_data, valid_label, test_data, test_label = train.handle_data(train_dataset)
 
 
 # Parameters setting
@@ -33,20 +44,19 @@ params = {
     'bagging_fraction': 0.75,  # 防止过拟合
     'min_data_in_leaf': 21,  # 防止过拟合
     'min_sum_hessian_in_leaf': 3.0,  # 防止过拟合
-    'n_estimator':1444,
     'reg_alpha': 0.5,
     'reg_lambda': 0.08,
     'header': False  # 数据集是否带表头
     }
-train.train(train_dataset, train_label, valid_dataset, valid_label, num_round, params, model_path)
+train.train(train_data, train_label, valid_data, valid_label, num_round, params, model_path)
 
 # 用测试集进行测试
-test_pred = train.make_predtion(test_dataset, model_path)
+test_pred = train.make_predtion(test_data, model_path)
 score = utils.give_a_mark(test_pred, test_label) # 为当前载入模型评分
 print("This Model gets score {}".format(score))
 
 # 预测结果
-result_pred = train.make_predtion(pred_dataset,model_path)
+result_pred = train.make_predtion(pred_data, model_path)
 format_result_pred = [int(round(score)) for score in result_pred] # 将result_pred中的float型四舍五入
 
 # 将结果按赛制要求写入文件

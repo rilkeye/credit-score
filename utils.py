@@ -32,16 +32,6 @@ def read_data(path):
     return dataframe
 
 
-def split_data_and_label(array):
-    '''
-    输入的array需要确保label在最后一列
-    :param array: shape = (m, n)
-    :return: array.shape = (m, n-1) ; label.shape = (m,)
-    '''
-    label = array[:,-1] # 取array最后一列数据
-    array = np.delete(array, -1, axis=1) # del last column of array
-    return array, label
-
 def write_SubmitionFile(result, id_path):
     score = result
     with open(id_path, 'r', encoding='utf-8') as f:
@@ -52,6 +42,7 @@ def write_SubmitionFile(result, id_path):
     dataframe = pd.DataFrame({'id':id, 'score':score})
     dataframe.to_csv('data/submit.csv',index=False, sep=',', encoding='utf-8')
     print('Submitfile had saved...')
+
 
 def give_a_mark(pred, label):
     '''
@@ -64,13 +55,6 @@ def give_a_mark(pred, label):
     score = 1.0 / (1.0 + MAE)
     return score
 
-def get_array_column(array, idx):
-    '''
-    :param idx: the column index we need...
-    :return:  list of some column.
-    '''
-    list = array[:,idx]
-    return list
 
 def write_log(save_path, **arg):
     with open(save_path, 'a', encoding='utf-8') as f:
