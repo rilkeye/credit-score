@@ -9,18 +9,25 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
 
 
-def train(train_dataset, train_label, valid_dataset, valid_label, num_round, params, model_path):
-    # 训练集加载
-    train_data = lgb.Dataset(train_dataset, label=train_label)
-    train_data.save_binary('data/train.bin')
+def train(train_data, train_label, pred_data, params):
+    train_data, valid_data = train_test_split(train_data, test_size=0.2, random_state=21)
+    train_label, valid_lebal = train_test_split(train_label, test_size=0.2, random_state=21)
 
-    # 验证集加载
-    valid_data = lgb.Dataset(valid_dataset, label=valid_label, reference=train_data)
-    valid_data.save_binary('data/valid.bin')
+    print( 'training...')
+    # 数据集构造成lightgbm训练所需格式
+    train = lgb.Dataset(train_data, train_label)
+    valid = lgb.Dataset(valid_data, valid_lebal, reference=train)
+    # 训练模型
+    bst = lgb.train(params, train, num_boost_round=10000, valid_sets=valid, verbose_eval=-1,
+                    early_stopping_rounds=50)
+    # 预测
+    pred = bst.predict(pred_data, num_iteration=bst.best_iteration)
+    # bst.best_score example : {'valid_0': {'l1': 14.744103789371326}}
+    valid_score = bst.best_score['valid_0']['l1']
 
-    # Train & save model as model.txt
-    bst = lgb.train(params=params, train_set=train_data, num_boost_round=num_round, valid_sets=valid_data)
-    bst.save_model(model_path)
+    return pred, valid_score
+
+
 
 
 def make_predtion(dataset, model_path):

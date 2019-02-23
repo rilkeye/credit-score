@@ -16,19 +16,17 @@ model_path = 'model/model.txt'
 # read data
 train_dataset = pd.read_csv(train_dataset_path)
 pred_dataset  = pd.read_csv(pred_dataset_path)
-train_dataset = train_dataset.drop(columns=['用户编码'])
-pred_dataset = pred_dataset.drop(columns=['用户编码'])
+train_label = train_dataset['信用分']
+train_dataset = train_dataset.drop(columns=['用户编码', '信用分'])
+pred_dataset  = pred_dataset.drop(columns=['用户编码'])
+
 
 # 特征工程
 train_dataset = processed_df(train_dataset)
-pred_data  = processed_df(pred_dataset)
-
-# 训练集、验证集、测试集分割
-train_data, train_label, valid_data, valid_label, test_data, test_label = train.handle_data(train_dataset)
+pred_dataset  = processed_df(pred_dataset)
 
 
 # Parameters setting
-num_round = 1444
 params = {
     'task': 'train',
     'boosting_type': 'gbdt',  # GBDT算法为基础
@@ -48,22 +46,21 @@ params = {
     'reg_lambda': 0.08,
     'header': False  # 数据集是否带表头
     }
-train.train(train_data, train_label, valid_data, valid_label, num_round, params, model_path)
 
-# 用测试集进行测试
-test_pred = train.make_predtion(test_data, model_path)
-score = utils.give_a_mark(test_pred, test_label) # 为当前载入模型评分
-print("This Model gets score {}".format(score))
+# train and predict
+pred, valid_score = train.train(train_dataset, train_label, pred_dataset, params)
 
-# 预测结果
-result_pred = train.make_predtion(pred_data, model_path)
-format_result_pred = [int(round(score)) for score in result_pred] # 将result_pred中的float型四舍五入
+# 将预测结果四舍五入，转化为要求格式
+pred_list = pred.tolist()
+pred_format = [int(round(score)) for score in pred_list]
+score = 1 / (1 + valid_score)
 
 # 将结果按赛制要求写入文件
-utils.write_SubmitionFile(format_result_pred, pred_dataset_path)
-# print(format_result_pred[:100])
+utils.write_SubmitionFile(pred_format, 'data/submit.csv')
+print('\n', 'This prediction gets cv score for valid is : {}'.format(score))
+# print(pred_format[:100])
 
 
 # 将训练参数、模型保存路径和模型得分写入日志文件
 utils.write_log(save_path='training log.txt', Time=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),
-                Num_round=num_round, Params=params, Model_path=model_path, Score=score)
+                TrainMethod='main1', Params=params, Model_path=model_path, Score=score)

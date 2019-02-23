@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 # Author : Rilke
 
+import time
 import utils
 import train
 import pandas as pd
@@ -62,10 +63,20 @@ params2['seed'] = 89
 pred1, valid_score1 = train.train2(train_dataset, train_label, pred_dataset, params, en_amount=3)
 pred2, valid_score2 = train.train2(train_dataset, train_label, pred_dataset, params2, en_amount=3)
 
+# 两次预测结果求平均值
 pred = (pred1 + pred2) / 2
 valid_score = (valid_score1 + valid_score2) / 2
-pred_list = pred.tolist()
-pred  = [int(round(score)) for score in pred_list]
-utils.write_SubmitionFile(pred, 'data/submit.csv')
-print('\n', 'This prediction gets cv score for valid is : {}'.format(1 / (1 + valid_score)))
+score = 1 / (1 + valid_score)
 
+# 将预测结果四舍五入，转化为要求格式
+pred_list = pred.tolist()
+pred_format = [int(round(score)) for score in pred_list]
+
+# 将结果按赛制要求写入文件
+utils.write_SubmitionFile(pred_format, 'data/submit.csv')
+print('\n', 'This prediction gets cv score for valid is : {}'.format(score))
+# print(pred_format[:100])
+
+# 将训练参数、模型保存路径和模型得分写入日志文件
+utils.write_log(save_path='training log.txt', Time=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),
+                TrainMethod='main2', Params=params, Model_path=model_path, Score=score)
