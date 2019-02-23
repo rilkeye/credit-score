@@ -49,4 +49,4 @@
     新增main2.py文件，可直接运行利用K折检验法分割数据和做交叉验证。直接运行可以获得预测结果。此法耗时较长，精度高，适合用于作提交结果的预测。  
     main.py文件与main2.py相互独立，main与main2共享train、processed_dataframe、utils等函数，main耗时短但精度低，设置可预测得分的测试集，  
     适合用于平时调整特征工程时使用。  
-    在此特别感谢[Venn](https://github.com/wangvenn/Credit-Scoring-Regression)baseline的开源。
+在此特别感谢[Venn](https://github.com/wangvenn/Credit-Scoring-Regression)的baseline开源。
