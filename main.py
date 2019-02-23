@@ -33,7 +33,7 @@ params = {
     'task': 'train',
     'boosting_type': 'gbdt',  # GBDT算法为基础
     'objective': 'regression',  # 回归任务
-    'metric': 'rmse',  # 评判指标
+    'metric': 'regression_l1',  # 评判指标 regression_l1's alias: mae
     'max_bin': 255,  # 大会有更准的效果,更慢的速度
     'learning_rate': 0.01,  # 学习率
     'num_leaves': 40,  # 大会更准,但可能过拟合

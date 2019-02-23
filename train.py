@@ -50,8 +50,9 @@ def handle_data(train_dataset):
     return train_data, train_label, valid_data, valid_label, test_data, test_label
 
 
-def train_model(train_data, train_label, pred_data, params, en_amount):
+def train2(train_data, train_label, pred_data, params, en_amount):
     pred_all = 0
+    valid_score = 0
     for seed in range(en_amount):
         NFOLDS = 5
         kfold = StratifiedKFold(n_splits=NFOLDS, shuffle=True, random_state=seed)
@@ -72,14 +73,16 @@ def train_model(train_data, train_label, pred_data, params, en_amount):
             bst = lgb.train(params, train, num_boost_round=10000, valid_sets=valid, verbose_eval=-1,
                             early_stopping_rounds=50)
             pred += bst.predict(pred_data, num_iteration=bst.best_iteration)
-            print(bst.best_score)
-            # bst.best_score example : {'valid_0': {'rmse': 14.744103789371326}}
-            valid_best_all += bst.best_score['valid_0']['rmse']
+            # bst.best_score example : {'valid_0': {'l1': 14.744103789371326}}
+            valid_best_all += bst.best_score['valid_0']['l1']
             count += 1
         pred /= NFOLDS
         valid_best_all /= NFOLDS
         print('cv score for valid is: ', 1 / (1 + valid_best_all))
         pred_all += pred
+        valid_score += valid_best_all
 
     pred_all /= en_amount
-    return pred_all
+    valid_score /= en_amount
+    return pred_all, valid_score
+

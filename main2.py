@@ -39,7 +39,7 @@ params = {
     'task': 'train',
     'boosting_type': 'gbdt',  # GBDT算法为基础
     'objective': 'regression',  # 回归任务
-    'metric': 'rmse',  # 评判指标
+    'metric': 'regression_l1',  # 评判指标 regression's alias: mae
     'max_bin': 255,  # 大会有更准的效果,更慢的速度
     'learning_rate': 0.01,  # 学习率
     'num_leaves': 40,  # 大会更准,但可能过拟合
@@ -59,11 +59,13 @@ params2 = params
 params2['seed'] = 89
 
 # train model
-pred1 = train.train_model(train_dataset, train_label, pred_dataset, params, en_amount=3)
-pred2 = train.train_model(train_dataset, train_label, pred_dataset, params2, en_amount=3)
+pred1, valid_score1 = train.train2(train_dataset, train_label, pred_dataset, params, en_amount=3)
+pred2, valid_score2 = train.train2(train_dataset, train_label, pred_dataset, params2, en_amount=3)
 
 pred = (pred1 + pred2) / 2
+valid_score = (valid_score1 + valid_score2) / 2
 pred_list = pred.tolist()
 pred  = [int(round(score)) for score in pred_list]
 utils.write_SubmitionFile(pred, 'data/submit.csv')
+print('\n', 'This prediction gets cv score for valid is : {}'.format(1 / (1 + valid_score)))
 
