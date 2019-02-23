@@ -53,7 +53,7 @@ pred, valid_score = train.train(train_dataset, train_label, pred_dataset, params
 
 # 将预测结果四舍五入，转化为要求格式
 pred_list = pred.tolist()
-pred_format = [int(round(score)) for score in pred_list]
+pred_format = [int(round(each)) for each in pred_list]
 score = 1 / (1 + valid_score)
 print('\n', 'This prediction gets cv score for valid is : {}'.format(score))
 

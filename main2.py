@@ -17,7 +17,7 @@ model_path = 'model/model.txt'
 train_dataset = pd.read_csv(train_dataset_path)
 pred_dataset  = pd.read_csv(pred_dataset_path)
 train_label = train_dataset['信用分']
-submition = pred_dataset['用户编码']
+submition = pred_dataset[['用户编码']]
 train_dataset = train_dataset.drop(columns=['用户编码', '信用分'])
 pred_dataset  = pred_dataset.drop(columns=['用户编码'])
 
@@ -71,7 +71,7 @@ score = 1 / (1 + valid_score)
 
 # 将预测结果四舍五入，转化为要求格式
 pred_list = pred.tolist()
-pred_format = [int(round(score)) for score in pred_list]
+pred_format = [int(round(each)) for each in pred_list]
 # print(pred_format[:100])
 print('\n', 'This prediction gets cv score for valid is : {}'.format(score))
 
