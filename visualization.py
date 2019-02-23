@@ -26,5 +26,3 @@ path = 'data/train_dataset.csv'
 df = utils.load_data(path, 'train')
 visualize_df(df)
 
-
-

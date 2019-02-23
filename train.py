@@ -92,4 +92,3 @@ def train2(train_data, train_label, pred_data, params, en_amount):
     pred_all /= en_amount
     valid_score /= en_amount
     return pred_all, valid_score
-

@@ -139,7 +139,6 @@ def LassoCV():
     plt.show()
 
 
-
 # LassoCV()
 
 train_dataset_path = 'data/train_dataset.csv'
