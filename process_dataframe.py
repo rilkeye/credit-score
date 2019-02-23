@@ -76,5 +76,5 @@ def processed_df(df):
     processed_df['用户消费能力等级（三级最高）'] = processed_df['用户年龄'].map(func1)
     processed_df = processed_df.drop(columns=['用户年龄'])
     '''
-
+    
     return df
