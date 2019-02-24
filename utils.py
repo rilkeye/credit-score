@@ -24,16 +24,6 @@ def normalize(df_col):
     return df
 
 
-def produce_offline_feat(train_data):
-    '''
-    useful in main2 , but useless in main1...
-    '''
-    train_data['是否线下充值'] = 0
-    train_data['是否线下充值'][(train_data['缴费用户最近一次缴费金额（元）'] % 10 == 0) & \
-                         train_data['缴费用户最近一次缴费金额（元）'] != 0] = 1
-    return train_data
-
-
 def processed_df(df):
     '''
     Processing, building, deleting feature in the function...
@@ -42,8 +32,8 @@ def processed_df(df):
     '''
 
     # build new feature
-    df['高端消费评分'] = df['当月是否景点游览'] + df['是否经常逛商场的人'] + df['当月是否逛过福州仓山万达'] + \
-                   df['当月是否到过福州山姆会员店'] + df['当月是否看电影'] + df['当月是否体育场馆消费']
+    df['高端消费评分'] = 2 * df['当月是否景点游览'] + 2 * df['是否经常逛商场的人'] + df['当月是否逛过福州仓山万达'] + \
+                   3 * df['当月是否到过福州山姆会员店'] + df['当月是否看电影'] + 3 * df['当月是否体育场馆消费']
 
     df['话费稳定性'] = df['用户账单当月总费用（元）'] / (df['用户近6个月平均消费值（元）'] + 5)
 
@@ -55,36 +45,57 @@ def processed_df(df):
 
     df['用户不良记录种类'] = df['缴费用户当前是否欠费缴费'] + df['是否4G不健康客户'] + df['是否黑名单客户']
 
-    df = produce_offline_feat(df)
+    df['飞机'] = 0
+    df['飞机'][df['当月飞机类应用使用次数'] != 0] = 1
+    # df = df.drop(columns=['当月飞机类应用使用次数'])
+
+    df['火车'] = 0
+    df['火车'][df['当月火车类应用使用次数'] != 0] = 1
+    # df = df.drop(columns=['当月火车类应用使用次数'])
+
+    df['旅游'] = 0
+    df['旅游'][(df['当月旅游资讯类应用使用次数'] > 0) & (df['当月旅游资讯类应用使用次数'] <= 50)] = 1
+    df['旅游'][(df['当月旅游资讯类应用使用次数'] > 50)] = 2
+    # df = df.drop(columns=['当月旅游资讯类应用使用次数'])
+
+    df['出行指数'] = df['火车'] + df['飞机'] + df['旅游']
+    df = df.drop(columns=['火车', '飞机', '旅游'])
+
+    # a = [0, 18, 60]
+    # df['年龄阶层'] = pd.cut(df['用户年龄'], bins=a, label=[1,2,3])
+    # df = df.drop(columns=['用户年龄'])
+    # df['用户年龄'][df['用户年龄'] == 0] = df['用户年龄'].mean()
+    # df['用户年龄'][df['用户年龄'] <= 18] = None
+    # df = df.fillna(df['用户年龄'].mean())
 
     # Drop useless columns
     df = df.drop(columns=['用户实名制是否通过核实'])
-    df = df.drop(columns=['当月是否景点游览', '是否经常逛商场的人', '当月是否逛过福州仓山万达', '当月是否到过福州山姆会员店',
-                          '当月是否看电影', '当月是否体育场馆消费'])
+    df = df.drop(columns=['当月是否景点游览', '是否经常逛商场的人', '当月是否逛过福州仓山万达', '当月是否到过福州山姆会员店'
+                          , '当月是否看电影', '当月是否体育场馆消费'])
     df = df.drop(columns=['近三个月月均商场出现次数'])
 
-
     # tried but useless
-    '''
-       processed_df['用户年龄'][processed_df['用户年龄'] >= 90] = None
-       processed_df['用户年龄'][processed_df['用户年龄'] <= 18] = None
-       processed_df = processed_df.fillna(processed_df['用户年龄'].mean())
-    '''
 
     '''
-    processed_df['用户互联网活跃度'] = processed_df['当月网购类应用使用次数'] + processed_df['当月物流快递类应用使用次数'] + \
-                                     processed_df['当月金融理财类应用使用总次数'] + processed_df['当月视频播放类应用使用次数'] + \
-                                     processed_df['当月飞机类应用使用次数'] + processed_df['当月火车类应用使用次数'] + \
-                                     processed_df['当月旅游资讯类应用使用次数']
+    df['是否线下充值'] = 0
+    df['是否线下充值'][(df['缴费用户最近一次缴费金额（元）'] % 10 == 0) & (df['缴费用户最近一次缴费金额（元）'] != 0)] = 1
 
-    processed_df['用户互联网活跃度'] = np.log(processed_df['用户互联网活跃度'])
-    print(processed_df['用户互联网活跃度'])
-    processed_df = processed_df.drop(columns=['当月网购类应用使用次数', '当月物流快递类应用使用次数', '当月金融理财类应用使用总次数',
-                                             '当月视频播放类应用使用次数', '当月飞机类应用使用次数', '当月火车类应用使用次数',
-                                             '当月旅游资讯类应用使用次数'])
-    '''
+    df['用户年龄'][df['用户年龄'] >= 90] = None
+    df['用户年龄'][df['用户年龄'] <= 18] = None
+    df = processed_df.fillna(df['用户年龄'].mean())
 
-    '''
+    df['用户互联网活跃度'] = df['当月网购类应用使用次数'] + df['当月物流快递类应用使用次数'] + \
+                                     df['当月金融理财类应用使用总次数'] + df['当月视频播放类应用使用次数'] + \
+                                     df['当月飞机类应用使用次数'] + df['当月火车类应用使用次数'] + \
+                                     df['当月旅游资讯类应用使用次数']
+
+    df['用户互联网活跃度'] = np.log(df['用户互联网活跃度'])
+    print(df['用户互联网活跃度'])
+    df = df.drop(columns=['当月网购类应用使用次数', '当月物流快递类应用使用次数', '当月金融理财类应用使用总次数',
+                                              '当月视频播放类应用使用次数', '当月飞机类应用使用次数', '当月火车类应用使用次数',
+                                              '当月旅游资讯类应用使用次数'])
+
+
     def func1(age):
         if age > 25 and age < 55:
             return 3

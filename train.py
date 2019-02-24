@@ -28,35 +28,6 @@ def train(train_data, train_label, pred_data, params):
     return pred, valid_score
 
 
-
-
-def make_predtion(dataset, model_path):
-    '''
-    :param dataset: 需要预测的数据
-    :param model_path: 模型路径
-    :return:
-    '''
-
-    bst = lgb.Booster(model_file=model_path)
-    pred = bst.predict(dataset)
-
-    return pred
-
-
-def handle_data(train_dataset):
-    # 拆分为训练集、验证集、测试集 & 分离data、label
-    train_data, valid_data = train_test_split(train_dataset, test_size=0.2, random_state=21)
-    train_data, test_data = train_test_split(train_data, test_size=0.25, random_state=21) # 80% * 0.25 = 100% * 0.2
-
-    train_label = train_data['信用分']
-    valid_label = valid_data['信用分']
-    test_label = test_data['信用分']
-    train_data = train_data.drop(columns=['信用分'])
-    valid_data = valid_data.drop(columns=['信用分'])
-    test_data = test_data.drop(columns=['信用分'])
-    return train_data, train_label, valid_data, valid_label, test_data, test_label
-
-
 def train2(train_data, train_label, pred_data, params, en_amount):
     pred_all = 0
     valid_score = 0
