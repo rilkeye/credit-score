@@ -61,6 +61,10 @@ def processed_df(df):
     df['出行指数'] = df['火车'] + df['飞机'] + df['旅游']
     df = df.drop(columns=['火车', '飞机', '旅游'])
 
+    df['用户账单当月总费用（元）'] = np.log1p(df['用户账单当月总费用（元）'])
+    # df['用户当月账户余额（元）'] = np.log1p(df['用户当月账户余额（元）'])
+    # df['当月通话交往圈人数'] = np.log1p(df['当月通话交往圈人数'])
+
     # a = [0, 18, 60]
     # df['年龄阶层'] = pd.cut(df['用户年龄'], bins=a, label=[1,2,3])
     # df = df.drop(columns=['用户年龄'])
