@@ -57,13 +57,16 @@ params2 = params
 params2['seed'] = 89
 
 # train model
-pred1, valid_score1 = train.train2(train_dataset, train_label, pred_dataset, params, en_amount=3)
-pred2, valid_score2 = train.train2(train_dataset, train_label, pred_dataset, params2, en_amount=3)
+pred1, valid_score1 = train.train2_lgb(train_dataset, train_label, pred_dataset, params, en_amount=3)
+pred2, valid_score2 = train.train2_lgb(train_dataset, train_label, pred_dataset, params2, en_amount=3)
+pred3, valid_score3 = train.train2_xgb(train_dataset, train_label, pred_dataset)
+
 
 # 两次预测结果求平均值
-pred = (pred1 + pred2) / 2
-valid_score = (valid_score1 + valid_score2) / 2
+pred = (pred1 + pred2 ) / 2 * 0.6 + pred3 * 0.4
+valid_score = (valid_score1 + valid_score2) / 2 * 0.6 + valid_score3 * 0.4
 score = 1 / (1 + valid_score)
+print("xgb score is: ", 1 / (1 + valid_score3))
 
 # 将预测结果四舍五入，转化为要求格式
 pred_list = pred.tolist()

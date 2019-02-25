@@ -4,9 +4,11 @@
 
 
 import lightgbm as lgb
+import xgboost as xgb
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error
 
 
 def train(train_data, train_label, pred_data, params):
@@ -28,7 +30,7 @@ def train(train_data, train_label, pred_data, params):
     return pred, valid_score
 
 
-def train2(train_data, train_label, pred_data, params, en_amount):
+def train2_lgb(train_data, train_label, pred_data, params, en_amount):
     pred_all = 0
     valid_score = 0
     for seed in range(en_amount):
@@ -63,3 +65,32 @@ def train2(train_data, train_label, pred_data, params, en_amount):
     pred_all /= en_amount
     valid_score /= en_amount
     return pred_all, valid_score
+
+def train2_xgb(train_data, train_label, pred_data):
+    NFOLDS = 5
+    kfold = StratifiedKFold(n_splits=NFOLDS, shuffle=True, random_state=2019)
+    kf = kfold.split(train_data, train_label)
+
+    # init var
+    pred = np.zeros(pred_data.shape[0])
+    score = 0
+
+    # model=None
+    for i, (train_index, val_index) in enumerate(kf):
+        print('fold: ', i, ' training')
+        X_train, X_validate, label_train, label_validata = train_data.iloc[train_index, :], train_data.iloc[val_index, :], \
+                                         train_label[train_index], train_label[val_index]
+
+        # train
+        params = {'learning_rate': 0.003, 'n_estimators': 8000, 'max_depth': 6, 'min_child_weight': 10, 'seed': 0,
+                  'subsample': 0.6, 'colsample_bytree': 0.5, 'gamma': 0, 'reg_alpha': 0, 'reg_lambda': 5, 'n_jobs': 20}
+        model = xgb.XGBRegressor(**params)
+        model.fit(X_train, label_train, eval_metric=mean_absolute_error)
+
+        # predict & score calculate
+        pred += model.predict(pred_data)
+        score += mean_absolute_error(label_validata, model.predict(X_validate))
+
+    pred = pred / NFOLDS
+    score /= NFOLDS
+    return pred, score
