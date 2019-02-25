@@ -47,7 +47,6 @@ params = {
     'bagging_fraction': 0.6,  # 防止过拟合
     'min_data_in_leaf': 50,  # 防止过拟合
     'min_sum_hessian_in_leaf': 3.0,  # 防止过拟合
-    'n_estimator': 1444,
     'reg_alpha': 0,
     'reg_lambda': 5,
     }
