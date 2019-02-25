@@ -28,7 +28,6 @@ pred_dataset  = utils.processed_df(pred_dataset)
 
 # Parameters setting
 params = {
-    'task': 'train',
     'boosting_type': 'gbdt',  # GBDT算法为基础
     'objective': 'regression',  # 回归任务
     'metric': 'regression_l1',  # 评判指标 regression_l1's alias: mae
@@ -42,9 +41,8 @@ params = {
     'bagging_fraction': 0.75,  # 防止过拟合
     'min_data_in_leaf': 21,  # 防止过拟合
     'min_sum_hessian_in_leaf': 3.0,  # 防止过拟合
-    'reg_alpha': 0.5,
-    'reg_lambda': 0.08,
-    'header': False  # 数据集是否带表头
+    'lambda_l1': 0.5,
+    'lambda_l2': 0.08,
     }
 
 # train and predict

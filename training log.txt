@@ -90,24 +90,6 @@ Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', '
 Score : 0.06364092661526441
 --------------------------------------------------
 
-Time : 2019-02-24 15:16:13
-
-TrainMethod : main1
-
-Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 255, 'learning_rate': 0.01, 'num_leaves': 40, 'max_depth': 8, 'feature_fraction': 0.61, 'bagging_freq': 5, 'bagging_fraction': 0.75, 'min_data_in_leaf': 21, 'min_sum_hessian_in_leaf': 3.0, 'reg_alpha': 0.5, 'reg_lambda': 0.08, 'header': False}
-
-Score : 0.06332731687744218
---------------------------------------------------
-
-Time : 2019-02-24 15:16:45
-
-TrainMethod : main1
-
-Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 255, 'learning_rate': 0.01, 'num_leaves': 40, 'max_depth': 8, 'feature_fraction': 0.61, 'bagging_freq': 5, 'bagging_fraction': 0.75, 'min_data_in_leaf': 21, 'min_sum_hessian_in_leaf': 3.0, 'reg_alpha': 0.5, 'reg_lambda': 0.08, 'header': False}
-
-Score : 0.06332749245285015
---------------------------------------------------
-
 Time : 2019-02-24 15:17:00
 
 TrainMethod : main1
@@ -140,6 +122,123 @@ Time : 2019-02-24 15:26:13
 TrainMethod : main2
 
 Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 255, 'learning_rate': 0.01, 'num_leaves': 40, 'max_depth': 8, 'feature_fraction': 0.61, 'bagging_freq': 5, 'bagging_fraction': 0.75, 'min_data_in_leaf': 21, 'min_sum_hessian_in_leaf': 3.0, 'n_estimator': 1444, 'reg_alpha': 0.5, 'reg_lambda': 0.08, 'header': False, 'seed': 89}
+
+Score : 0.06364077150932754
+--------------------------------------------------
+
+Time : 2019-02-24 16:13:02   新特征main2
+
+TrainMethod : main2
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 255, 'learning_rate': 0.01, 'num_leaves': 40, 'max_depth': 8, 'feature_fraction': 0.61, 'bagging_freq': 5, 'bagging_fraction': 0.75, 'min_data_in_leaf': 21, 'min_sum_hessian_in_leaf': 3.0, 'n_estimator': 1444, 'reg_alpha': 0.5, 'reg_lambda': 0.08, 'header': False, 'seed': 89}
+
+Score : 0.06358564279216797
+--------------------------------------------------
+
+Time : 2019-02-24 16:14:02   新特征main1
+
+TrainMethod : main1
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 255, 'learning_rate': 0.01, 'num_leaves': 40, 'max_depth': 8, 'feature_fraction': 0.61, 'bagging_freq': 5, 'bagging_fraction': 0.75, 'min_data_in_leaf': 21, 'min_sum_hessian_in_leaf': 3.0, 'reg_alpha': 0.5, 'reg_lambda': 0.08, 'header': False}
+
+Score : 0.06325035421330903
+--------------------------------------------------
+
+Time : 2019-02-24 16:19:21   新特征改参main2
+
+TrainMethod : main2
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 511, 'learning_rate': 0.01, 'num_leaves': 32, 'max_depth': 5, 'feature_fraction': 0.61, 'bagging_freq': 5, 'bagging_fraction': 0.75, 'min_data_in_leaf': 21, 'min_sum_hessian_in_leaf': 3.0, 'n_estimator': 1444, 'reg_alpha': 0.5, 'reg_lambda': 0.08, 'header': False, 'seed': 89}
+
+Score : 0.06357222648071433
+--------------------------------------------------
+
+Time : 2019-02-24 16:24:55   旧特征改参main2
+
+TrainMethod : main2
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 511, 'learning_rate': 0.01, 'num_leaves': 32, 'max_depth': 5, 'feature_fraction': 0.61, 'bagging_freq': 5, 'bagging_fraction': 0.75, 'min_data_in_leaf': 21, 'min_sum_hessian_in_leaf': 3.0, 'n_estimator': 1444, 'reg_alpha': 0.5, 'reg_lambda': 0.08, 'header': False, 'seed': 89}
+
+Score : 0.06363694955947567
+--------------------------------------------------
+
+Time : 2019-02-24 16:33:56   完全新特征-新参 main2
+
+TrainMethod : main2
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 511, 'learning_rate': 0.01, 'num_leaves': 32, 'max_depth': 5, 'feature_fraction': 0.5, 'bagging_freq': 5, 'bagging_fraction': 0.6, 'min_data_in_leaf': 50, 'min_sum_hessian_in_leaf': 3.0, 'n_estimator': 1444, 'reg_alpha': 0, 'reg_lambda': 5, 'header': False, 'seed': 89}
+
+Score : 0.06366867683355339
+--------------------------------------------------
+
+Time : 2019-02-24 16:37:48   旧特征-改参 main2  baseline
+
+TrainMethod : main2
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 511, 'learning_rate': 0.01, 'num_leaves': 32, 'max_depth': 5, 'feature_fraction': 0.5, 'bagging_freq': 5, 'bagging_fraction': 0.6, 'min_data_in_leaf': 50, 'min_sum_hessian_in_leaf': 3.0, 'n_estimator': 1444, 'reg_alpha': 0, 'reg_lambda': 5, 'header': False, 'seed': 89}
+
+Score : 0.06367784787411722
+--------------------------------------------------
+
+Time : 2019-02-24 20:51:11
+
+TrainMethod : main1
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 255, 'learning_rate': 0.01, 'num_leaves': 40, 'max_depth': 8, 'feature_fraction': 0.61, 'bagging_freq': 5, 'bagging_fraction': 0.75, 'min_data_in_leaf': 21, 'min_sum_hessian_in_leaf': 3.0, 'reg_alpha': 0.5, 'reg_lambda': 0.08, 'header': False}
+
+Score : 0.06332749245285015
+--------------------------------------------------
+
+Time : 2019-02-24 21:34:46
+
+TrainMethod : main2
+
+Params : {'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 511, 'learning_rate': 0.01, 'num_leaves': 32, 'max_depth': 5, 'feature_fraction': 0.5, 'bagging_freq': 5, 'bagging_fraction': 0.6, 'min_data_in_leaf': 50, 'min_sum_hessian_in_leaf': 3.0, 'n_estimator': 1444, 'reg_alpha': 0, 'reg_lambda': 5, 'seed': 89}
+
+Score : 0.06367784787411722
+--------------------------------------------------
+
+Time : 2019-02-24 21:38:44
+
+TrainMethod : main2
+
+Params : {'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 511, 'learning_rate': 0.01, 'num_leaves': 31, 'max_depth': 5, 'feature_fraction': 0.5, 'bagging_freq': 5, 'bagging_fraction': 0.6, 'min_data_in_leaf': 50, 'min_sum_hessian_in_leaf': 3.0, 'n_estimator': 1444, 'reg_alpha': 0, 'reg_lambda': 5, 'seed': 89}
+
+Score : 0.0636671908531464
+--------------------------------------------------
+
+Time : 2019-02-24 22:22:24
+
+TrainMethod : main2
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 511, 'learning_rate': 0.01, 'num_leaves': 32, 'max_depth': 5, 'feature_fraction': 0.5, 'bagging_freq': 5, 'bagging_fraction': 0.6, 'min_data_in_leaf': 50, 'min_sum_hessian_in_leaf': 3.0, 'n_estimator': 1444, 'reg_alpha': 0, 'reg_lambda': 5, 'seed': 89}
+
+Score : 0.06367784787411722
+--------------------------------------------------
+
+Time : 2019-02-25 15:43:21
+
+TrainMethod : main2
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 511, 'learning_rate': 0.01, 'best n_estimators': 1655, 'max_depth': 7, 'num_leaves': 66, 'min_data_in_leaf': 19, 'min_sum_hessian_in_leaf': 0.001, 'feature_fraction': 0.4, 'bagging_fraction': 0.4, 'lambda_l1': 0.1, 'lambda_l2': 0.5, 'seed': 89}
+
+Score : 0.06362366872999775
+--------------------------------------------------
+
+Time : 2019-02-25 16:09:50
+
+TrainMethod : main2
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'learning_rate': 0.01, 'max_bin': 200, 'n_estimators': 1655, 'max_depth': 7, 'num_leaves': 66, 'min_data_in_leaf': 19, 'min_sum_hessian_in_leaf': 0.001, 'feature_fraction': 0.4, 'bagging_fraction': 0.4, 'seed': 89}
+
+Score : 0.06362175587748528
+--------------------------------------------------
+
+Time : 2019-02-25 16:17:55
+
+TrainMethod : main2
+
+Params : {'task': 'train', 'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regression_l1', 'max_bin': 255, 'learning_rate': 0.01, 'num_leaves': 40, 'max_depth': 8, 'feature_fraction': 0.61, 'bagging_freq': 5, 'bagging_fraction': 0.75, 'min_data_in_leaf': 21, 'min_sum_hessian_in_leaf': 3.0, 'lambda_l1': 0.5, 'lambda_l2': 0.08, 'seed': 89}
 
 Score : 0.06364077150932754
 --------------------------------------------------
