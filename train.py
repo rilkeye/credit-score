@@ -77,7 +77,7 @@ def train2_xgb(train_data, train_label, pred_data):
 
     # model=None
     for i, (train_index, val_index) in enumerate(kf):
-        print('fold: ', i, ' training')
+        print('fold: ', i, ' training...')
         X_train, X_validate, label_train, label_validata = train_data.iloc[train_index, :], train_data.iloc[val_index, :], \
                                          train_label[train_index], train_label[val_index]
 
@@ -94,3 +94,65 @@ def train2_xgb(train_data, train_label, pred_data):
     pred = pred / NFOLDS
     score /= NFOLDS
     return pred, score
+
+def train3_lgb(train_data, train_label, train_data2, pred_data, params):
+    NFOLDS = 5
+    kfold = StratifiedKFold(n_splits=NFOLDS, shuffle=True, random_state=2019)
+    kf = kfold.split(train_data, train_label)
+    count = 0
+    train2_pred = np.zeros(train_data2.shape[0])
+    pred = np.zeros(pred_data.shape[0])
+    valid_best_all = 0
+    for i, (train_fold, validate) in enumerate(kf):
+        print('Fold: ', i, ' training...')
+        # K_Fold 分割数据集，验证集
+        X_train, X_validate, label_train, label_validate = \
+            train_data.iloc[train_fold, :], train_data.iloc[validate, :], train_label[train_fold], train_label[validate]
+        # 数据集构造成lightgbm训练所需格式
+        train = lgb.Dataset(X_train, label_train)
+        valid = lgb.Dataset(X_validate, label_validate, reference=train)
+        # 训练模型
+        bst = lgb.train(params, train, num_boost_round=10000, valid_sets=valid, verbose_eval=-1,
+                        early_stopping_rounds=50)
+        train2_pred += bst.predict(train_data2, num_iteration=bst.best_iteration)
+        pred += bst.predict(pred_data, num_iteration=bst.best_iteration)
+        # bst.best_score example : {'valid_0': {'l1': 14.744103789371326}}
+        valid_best_all += bst.best_score['valid_0']['l1']
+        count += 1
+    train2_pred /= NFOLDS
+    pred /= NFOLDS
+    valid_best_all /= NFOLDS
+    print('cv score for valid is: ', 1 / (1 + valid_best_all))
+    return train2_pred, pred, valid_best_all
+
+def train3_xgb(train_data, train_label, train2_data, pred_data):
+    NFOLDS = 5
+    kfold = StratifiedKFold(n_splits=NFOLDS, shuffle=True, random_state=2019)
+    kf = kfold.split(train_data, train_label)
+
+    # init var
+    train2_pred = np.zeros(train2_data.shape[0])
+    pred = np.zeros(pred_data.shape[0])
+    score = 0
+
+    # model=None
+    for i, (train_index, val_index) in enumerate(kf):
+        print('fold: ', i, ' training...')
+        X_train, X_validate, label_train, label_validata = train_data.iloc[train_index, :], train_data.iloc[val_index, :], \
+                                         train_label[train_index], train_label[val_index]
+
+        # train
+        params = {'learning_rate': 0.003, 'n_estimators': 8000, 'max_depth': 6, 'min_child_weight': 10, 'seed': 0,
+                  'subsample': 0.6, 'colsample_bytree': 0.5, 'gamma': 0, 'reg_alpha': 0, 'reg_lambda': 5, 'n_jobs': 20}
+        model = xgb.XGBRegressor(**params)
+        model.fit(X_train, label_train, eval_metric=mean_absolute_error)
+
+        # predict & score calculate
+        train2_pred += model.predict(train2_data)
+        pred += model.predict(pred_data)
+        score += mean_absolute_error(label_validata, model.predict(X_validate))
+
+    train2_pred /= NFOLDS
+    pred = pred / NFOLDS
+    score /= NFOLDS
+    return train2_pred, pred, score

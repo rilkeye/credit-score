@@ -37,21 +37,22 @@ pred_dataset  = utils.processed_df(pred_dataset)
 
 # parameters setting
 params = {
-    'boosting_type': 'gbdt',  # GBDT算法为基础
-    'objective': 'regression',  # 回归任务
-    'metric': 'regression_l1',  # 评判指标 regression_l1's alias: mae
-    'max_bin': 255,  # 大会有更准的效果,更慢的速度
-    'learning_rate': 0.01,  # 学习率
-    'num_leaves': 40,  # 大会更准,但可能过拟合
-    'max_depth': 8,  # 小数据集下限制最大深度可防止过拟合,小于0表示无限制
-    'feature_fraction': 0.61,  # 如果 feature_fraction 小于 1.0, LightGBM 将会在每次迭代中随机选择部分特征.
-                              # 例如, 如果设置为 0.8, 将会在每棵树训练之前选择 80% 的特征. 可以处理过拟合
-    'bagging_freq': 5,  # 防止过拟合
-    'bagging_fraction': 0.75,  # 防止过拟合
-    'min_data_in_leaf': 21,  # 防止过拟合
-    'min_sum_hessian_in_leaf': 3.0,  # 防止过拟合
-    'lambda_l1': 0.5,
-    'lambda_l2': 0.08,
+    'boosting_type': 'gbdt',
+        'objective': 'mae',
+        'n_estimators': 10000,
+        'metric': 'mae',
+        'learning_rate': 0.01,
+        'min_child_samples': 46,
+        'min_child_weight': 0.01,
+        'subsample_freq': 2,
+        'num_leaves': 40,
+        'max_depth': 7,
+        'subsample': 0.6,
+        'colsample_bytree': 0.8,
+        'reg_alpha': 0,
+        'reg_lambda': 5,
+        'verbose': -1,
+        'seed': 4590
     }
 params2 = params
 params2['seed'] = 89
@@ -66,6 +67,8 @@ pred3, valid_score3 = train.train2_xgb(train_dataset, train_label, pred_dataset)
 pred = (pred1 + pred2 ) / 2 * 0.6 + pred3 * 0.4
 valid_score = (valid_score1 + valid_score2) / 2 * 0.6 + valid_score3 * 0.4
 score = 1 / (1 + valid_score)
+print("lgb1 score is: ", 1 / (1 + valid_score1))
+print("lgb2 score is: ", 1 / (1 + valid_score2))
 print("xgb score is: ", 1 / (1 + valid_score3))
 
 # 将预测结果四舍五入，转化为要求格式

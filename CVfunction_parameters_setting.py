@@ -68,7 +68,6 @@ for num_leaves in range(5, 100, 5):
             early_stopping_rounds=10,
             verbose_eval=True
         )
-
         mean_regression_l1 = pd.Series(cv_results['l1-mean']).min()
         boost_rounds = pd.Series(cv_results['l1-mean']).idxmax()
 
