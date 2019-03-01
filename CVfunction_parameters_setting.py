@@ -21,11 +21,9 @@ train_dataset = train_dataset.drop(columns=['用户编码', '信用分'])
 X = train_dataset
 y = train_label
 
-
 ### 数据转换
 print('数据转换')
 lgb_train = lgb.Dataset(train_dataset, train_label, free_raw_data=False)
-
 
 ### 设置初始参数--不含交叉验证参数
 print('设置参数')

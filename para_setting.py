@@ -2,11 +2,16 @@
 # -*- coding:utf-8 -*-
 # Author : Rilke
 
+import numpy as np
 import pandas as pd
 import lightgbm as lgb
 import utils
 from sklearn import metrics
 from sklearn.model_selection import GridSearchCV
+import matplotlib.pyplot as plt
+from sklearn.model_selection import learning_curve
+from sklearn.model_selection import validation_curve
+from sklearn.model_selection import ShuffleSplit
 
 '''
 # We had run this .py file getting the best parameters:
@@ -35,34 +40,62 @@ train_dataset = train_dataset.drop(columns=['用户编码', '信用分'])
 
 # old params
 params = {
-    'task': 'train',
-    'boosting_type': 'gbdt',
-    'objective': 'regression',
-    'metric': 'regression_l1',
-    'max_bin': 511,  # 大会有更准的效果,更慢的速度
-    'learning_rate': 0.01,  # 学习率
-    'num_leaves': 32,  # 大会更准,但可能过拟合
-    'max_depth': 5,  # 小数据集下限制最大深度可防止过拟合,小于0表示无限制
-    'feature_fraction': 0.5,  # 如果 feature_fraction 小于 1.0, LightGBM 将会在每次迭代中随机选择部分特征.
-                              # 例如, 如果设置为 0.8, 将会在每棵树训练之前选择 80% 的特征. 可以处理过拟合
-    'bagging_freq': 5,  # 防止过拟合
-    'bagging_fraction': 0.6,  # 防止过拟合
-    'min_data_in_leaf': 50,  # 防止过拟合
-    'min_sum_hessian_in_leaf': 3.0,  # 防止过拟合
-    'reg_alpha': 0,
-    'reg_lambda': 5,
+        'boosting_type': 'gbdt',
+        'objective': 'regression_l1',
+        'n_estimators': 10000,  # base :
+        'metric': 'mae',
+        'learning_rate': 0.01,  # base : 0.01~0.02
+        'min_child_samples': 46,  # base : 30~50
+        'min_child_weight': 0.01, # base :
+        'bagging_freq': 2,
+        'num_leaves': 40,
+        'max_depth': 7,
+        'bagging_fraction': 0.6,
+        'feature_fraction': 0.8,
+        'lambda_l1': 0,
+        'lambda_l2': 5,
+        'verbose': -1,
+        'bagging_seed': 4590
     }
+
+param_range = range(1000, 10000, 1000)
+para_name = 'n_estimators'
+
+dtrain = lgb.Dataset(train_dataset, train_label)
+gbm = lgb.LGBMRegressor()
+# train_size, train_scores, test_scores = learning_curve(gbm, train_dataset, train_label,
+#                                                        train_sizes=np.linspace(.05, 1., 15), cv=10)
+train_scores, test_scores = validation_curve(gbm, train_dataset, train_label,
+                                             param_name=para_name, param_range=param_range, cv=10)
+train_scores_mean = np.mean(train_scores, axis=1)
+train_score_std = np.std(train_scores, axis=1)
+test_scores_mean = np.mean(test_scores, axis=1)
+test_scores_std = np.std(test_scores, axis=1)
+plt.grid()
+plt.fill_between(param_range, train_scores_mean - train_score_std, train_scores_mean + train_score_std, alpha=0.1)
+plt.fill_between(param_range, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, alpha=.1, color='g')
+plt.axhline(np.mean(test_scores_mean), color='b')
+plt.plot(param_range, train_scores_mean, 'o-', color='r', label='Training score')
+plt.plot(param_range, test_scores_mean, 'o-', color="g", label="Cross-validation score")
+plt.ylabel('ROC_AUC')
+plt.xlabel(para_name)
+plt.legend(loc='best')
+
+# plt.semilogx(param_range, train_scores_mean, label='training score', color='r')
+# plt.semilogx(param_range, test_scores_mean, label='cross-validation score', color='g')
+plt.show()
 
 '''
 # --------------------------------------------------------------
 dtrain = lgb.Dataset(train_dataset, train_label)
 cv_results = lgb.cv(
     params, dtrain, num_boost_round=10000, nfold=5, stratified=False, shuffle=True, metrics='regression_l1',
-    early_stopping_rounds=10, verbose_eval=50, show_stdv=True, seed=0)
+    early_stopping_rounds=100, verbose_eval=50, show_stdv=True, seed=0)
+print(cv_results) 
 print('best n_estimators:', len(cv_results['l1-mean']))
 print('best cv score:', cv_results['l1-mean'][-1])
 # -------------------------------------------------------------
-# best n_estimators: 1655
+# best n_estimators: 2561
 '''
 
 '''

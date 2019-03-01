@@ -5,6 +5,7 @@
 import numpy as np
 import pandas as pd
 import csv
+import time
 
 
 def write_log(save_path, **arg):
@@ -13,6 +14,8 @@ def write_log(save_path, **arg):
             f.write('\n' + i + ' : ' + str(arg[i]) + '\n')
         f.write('-' * 50 + '\n')
 
+def timer():
+    return time.time()
 
 def normalize(df_col):
     '''

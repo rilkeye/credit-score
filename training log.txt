@@ -17,11 +17,46 @@ Params : {'boosting_type': 'gbdt', 'objective': 'regression', 'metric': 'regress
 Score : 0.06368864596413171
 --------------------------------------------------
 
-Time : 2019-02-26 16:53:29   未上传lgb1 score is:  0.06371310690912438；lgb2 score is:  0.06371310690912438；xgb score is:  0.06373659250130764
+Time : 2019-02-26 16:53:29   【best】lgb1 score is:  0.06371310690912438；lgb2 score is:  0.06371310690912438；xgb score is:  0.06373659250130764
 
 TrainMethod : main2
 
 Params : {'boosting_type': 'gbdt', 'objective': 'mae', 'n_estimators': 10000, 'metric': 'mae', 'learning_rate': 0.01, 'min_child_samples': 46, 'min_child_weight': 0.01, 'subsample_freq': 2, 'num_leaves': 40, 'max_depth': 7, 'subsample': 0.6, 'colsample_bytree': 0.8, 'reg_alpha': 0, 'reg_lambda': 5, 'verbose': -1, 'seed': 89}
 
-Score : 0.06372249906874443
+Score : 0.06372249906874443   线上：0.06386029000
+--------------------------------------------------
+
+Time : 2019-02-28 18:33:13
+
+TrainMethod : main2
+
+Params : {'boosting_type': 'gbdt', 'objective': 'mae', 'n_estimators': 10000, 'metric': 'mae', 'learning_rate': 0.01, 'min_child_samples': 46, 'min_child_weight': 0.01, 'subsample_freq': 2, 'num_leaves': 40, 'max_depth': 7, 'subsample': 0.6, 'colsample_bytree': 0.8, 'reg_alpha': 0, 'reg_lambda': 5, 'verbose': -1, 'seed': 89}
+
+Score : 0.06372249906874444
+--------------------------------------------------
+
+
+Time : 2019-02-28 20:00:20
+
+TrainMethod : main2
+
+LGB_Params : {'boosting_type': 'gbdt', 'objective': 'mae', 'n_estimators': 10000, 'metric': 'mae', 'learning_rate': 0.01, 'min_child_samples': 46, 'min_child_weight': 0.01, 'subsample_freq': 2, 'num_leaves': 40, 'max_depth': 7, 'subsample': 0.6, 'colsample_bytree': 0.8, 'reg_alpha': 0, 'reg_lambda': 5, 'verbose': -1, 'bagging_seed': 89}
+
+XGB_Params : {'learning_rate': 0.003, 'n_estimators': 8000, 'max_depth': 6, 'min_child_weight': 10, 'seed': 89, 'subsample': 0.6, 'colsample_bytree': 0.5, 'gamma': 0, 'reg_alpha': 0, 'reg_lambda': 5, 'n_jobs': 20}
+
+Score : 0.06373497613135815
+--------------------------------------------------
+
+Time : 2019-02-28 20:27:25 【best】
+lgb1 score is:  0.06373009097259179
+lgb2 score is:  0.06373009097259179
+xgb1 score is:  0.06374474869603362
+线上 : 0.06386110000
+TrainMethod : main2
+
+LGB_Params : {'boosting_type': 'gbdt', 'objective': 'mae', 'n_estimators': 10000, 'metric': 'mae', 'learning_rate': 0.01, 'min_child_samples': 46, 'min_child_weight': 0.01, 'subsample_freq': 2, 'num_leaves': 40, 'max_depth': 7, 'subsample': 0.6, 'colsample_bytree': 0.8, 'reg_alpha': 0, 'reg_lambda': 5, 'verbose': -1, 'bagging_seed': 89}
+
+XGB_Params : {'learning_rate': 0.003, 'n_estimators': 8000, 'max_depth': 6, 'min_child_weight': 10, 'seed': 89, 'subsample': 0.6, 'colsample_bytree': 0.5, 'gamma': 0, 'reg_alpha': 0, 'reg_lambda': 5, 'n_jobs': 20}
+
+Score : 0.06373595325298473
 --------------------------------------------------

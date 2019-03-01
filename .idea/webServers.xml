@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="fdc7119c-56e7-4bfe-afbe-45751cdfee5a" name="jasonsUbuntu" url="http://free.idcfengye.com">
+        <fileTransfer host="free.idcfengye.com" port="12693" rootFolder="/home/jason" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="12693" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

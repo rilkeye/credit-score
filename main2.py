@@ -36,40 +36,49 @@ train_dataset = utils.processed_df(train_dataset)
 pred_dataset  = utils.processed_df(pred_dataset)
 
 # parameters setting
-params = {
-    'boosting_type': 'gbdt',
-        'objective': 'mae',
+lgb_params = {
+        'boosting_type': 'gbdt',
+        'objective': 'regression_l1',
         'n_estimators': 10000,
         'metric': 'mae',
         'learning_rate': 0.01,
         'min_child_samples': 46,
         'min_child_weight': 0.01,
-        'subsample_freq': 2,
+        'bagging_freq': 2,
         'num_leaves': 40,
         'max_depth': 7,
-        'subsample': 0.6,
-        'colsample_bytree': 0.8,
-        'reg_alpha': 0,
-        'reg_lambda': 5,
+        'bagging_fraction': 0.6,
+        'feature_fraction': 0.8,
+        'lambda_l1': 0,
+        'lambda_l2': 5,
         'verbose': -1,
-        'seed': 4590
+        'bagging_seed': 4590
     }
-params2 = params
-params2['seed'] = 89
+lgb_params2 = lgb_params
+lgb_params2['bagging_seed'] = 89
+
+xgb_params = {'learning_rate': 0.003, 'n_estimators': 8000, 'max_depth': 6, 'min_child_weight': 10, 'seed': 0,
+              'subsample': 0.6, 'colsample_bytree': 0.5, 'gamma': 0, 'reg_alpha': 0, 'reg_lambda': 5, 'n_jobs': 20}
+xgb_params2 = xgb_params
+xgb_params2['seed'] = 89
 
 # train model
-pred1, valid_score1 = train.train2_lgb(train_dataset, train_label, pred_dataset, params, en_amount=3)
-pred2, valid_score2 = train.train2_lgb(train_dataset, train_label, pred_dataset, params2, en_amount=3)
-pred3, valid_score3 = train.train2_xgb(train_dataset, train_label, pred_dataset)
+pred1, valid_score1 = train.train2_lgb(train_dataset, train_label, pred_dataset, lgb_params, en_amount=3)
+pred2, valid_score2 = train.train2_lgb(train_dataset, train_label, pred_dataset, lgb_params2, en_amount=3)
+pred3, valid_score3 = train.train2_xgb(train_dataset, train_label, pred_dataset, xgb_params)
+# pred4, valid_score4 = train.train2_xgb(train_dataset, train_label, pred_dataset, xgb_params2)
 
 
 # 两次预测结果求平均值
 pred = (pred1 + pred2 ) / 2 * 0.6 + pred3 * 0.4
 valid_score = (valid_score1 + valid_score2) / 2 * 0.6 + valid_score3 * 0.4
+# pred = (pred1 + pred2 + pred3) / 3
+# valid_score = (valid_score1 + valid_score2 + valid_score3) / 3
 score = 1 / (1 + valid_score)
 print("lgb1 score is: ", 1 / (1 + valid_score1))
 print("lgb2 score is: ", 1 / (1 + valid_score2))
-print("xgb score is: ", 1 / (1 + valid_score3))
+print("xgb1 score is: ", 1 / (1 + valid_score3))
+# print("xgb2 score is: ", 1 / (1 + valid_score4))
 
 # 将预测结果四舍五入，转化为要求格式
 pred_list = pred.tolist()
@@ -84,5 +93,5 @@ submition.to_csv('data/submition.csv', header=True, index=False)
 
 # 将训练参数、模型保存路径和模型得分写入日志文件
 utils.write_log(save_path='training log.txt', Time=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),
-                TrainMethod='main2', Params=params, Score=score)
+                TrainMethod='main2', LGB_Params=lgb_params, XGB_Params=xgb_params, Score=score)
 
