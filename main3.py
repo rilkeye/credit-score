@@ -31,21 +31,22 @@ pred_dataset  = utils.processed_df(pred_dataset)
 # lgb params
 params = {
         'boosting_type': 'gbdt',
-        'objective': 'mae',
-        'n_estimators': 10000,
+        'objective': 'regression_l1',
+        'n_estimators': 2538,
         'metric': 'mae',
         'learning_rate': 0.01,
         'min_child_samples': 46,
         'min_child_weight': 0.01,
-        'subsample_freq': 2,
-        'num_leaves': 40,
+        'bagging_freq': 2,
+        'num_leaves': 90,
         'max_depth': 7,
-        'subsample': 0.6,
-        'colsample_bytree': 0.8,
-        'reg_alpha': 0,
-        'reg_lambda': 5,
+        'bagging_fraction': 0.6,
+        'feature_fraction': 0.4,
+        'lambda_l1': 0.01,
+        'lambda_l2': 0.55,
+        'max_bin': 383,
         'verbose': -1,
-        'seed': 4590
+        'bagging_seed': 4590
     }
 
 train_data1, train_data2 = train_test_split(train_dataset, test_size=0.2, random_state=21)
