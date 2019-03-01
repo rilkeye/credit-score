@@ -39,18 +39,19 @@ pred_dataset  = utils.processed_df(pred_dataset)
 lgb_params = {
         'boosting_type': 'gbdt',
         'objective': 'regression_l1',
-        'n_estimators': 10000,
+        'n_estimators': 2538,
         'metric': 'mae',
         'learning_rate': 0.01,
         'min_child_samples': 46,
         'min_child_weight': 0.01,
         'bagging_freq': 2,
-        'num_leaves': 40,
+        'num_leaves': 90,
         'max_depth': 7,
         'bagging_fraction': 0.6,
-        'feature_fraction': 0.8,
-        'lambda_l1': 0,
-        'lambda_l2': 5,
+        'feature_fraction': 0.4,
+        'lambda_l1': 0.01,
+        'lambda_l2': 0.55,
+        'max_bin': 383,
         'verbose': -1,
         'bagging_seed': 4590
     }
@@ -64,19 +65,21 @@ xgb_params2['seed'] = 89
 
 # train model
 pred1, valid_score1 = train.train2_lgb(train_dataset, train_label, pred_dataset, lgb_params, en_amount=3)
-pred2, valid_score2 = train.train2_lgb(train_dataset, train_label, pred_dataset, lgb_params2, en_amount=3)
+# pred2, valid_score2 = train.train2_lgb(train_dataset, train_label, pred_dataset, lgb_params2, en_amount=3)
 pred3, valid_score3 = train.train2_xgb(train_dataset, train_label, pred_dataset, xgb_params)
 # pred4, valid_score4 = train.train2_xgb(train_dataset, train_label, pred_dataset, xgb_params2)
 
 
 # 两次预测结果求平均值
-pred = (pred1 + pred2 ) / 2 * 0.6 + pred3 * 0.4
-valid_score = (valid_score1 + valid_score2) / 2 * 0.6 + valid_score3 * 0.4
+# pred = (pred1 + pred2 ) / 2 * 0.6 + pred3 * 0.4
+# valid_score = (valid_score1 + valid_score2) / 2 * 0.6 + valid_score3 * 0.4
+pred = pred1 * 0.6 + pred3 * 0.4
+valid_score = valid_score1 * 0.6 + valid_score3 * 0.4
 # pred = (pred1 + pred2 + pred3) / 3
 # valid_score = (valid_score1 + valid_score2 + valid_score3) / 3
 score = 1 / (1 + valid_score)
 print("lgb1 score is: ", 1 / (1 + valid_score1))
-print("lgb2 score is: ", 1 / (1 + valid_score2))
+# print("lgb2 score is: ", 1 / (1 + valid_score2))
 print("xgb1 score is: ", 1 / (1 + valid_score3))
 # print("xgb2 score is: ", 1 / (1 + valid_score4))
 

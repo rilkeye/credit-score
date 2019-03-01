@@ -59,4 +59,19 @@ LGB_Params : {'boosting_type': 'gbdt', 'objective': 'mae', 'n_estimators': 10000
 XGB_Params : {'learning_rate': 0.003, 'n_estimators': 8000, 'max_depth': 6, 'min_child_weight': 10, 'seed': 89, 'subsample': 0.6, 'colsample_bytree': 0.5, 'gamma': 0, 'reg_alpha': 0, 'reg_lambda': 5, 'n_jobs': 20}
 
 Score : 0.06373595325298473
+
+--------------------------------------------------
+
+
+Time : 2019-03-01 21:50:17【best】
+lgb1 score is:  0.06381751339742442
+xgb1 score is:  0.06378448471279423
+线上：0.06388384000
+TrainMethod : main2
+
+LGB_Params : {'boosting_type': 'gbdt', 'objective': 'regression_l1', 'n_estimators': 2538, 'metric': 'mae', 'learning_rate': 0.01, 'min_child_samples': 46, 'min_child_weight': 0.01, 'bagging_freq': 2, 'num_leaves': 90, 'max_depth': 7, 'bagging_fraction': 0.6, 'feature_fraction': 0.4, 'lambda_l1': 0.01, 'lambda_l2': 0.55, 'max_bin': 383, 'verbose': -1, 'bagging_seed': 89}
+
+XGB_Params : {'learning_rate': 0.003, 'n_estimators': 8000, 'max_depth': 6, 'min_child_weight': 10, 'seed': 89, 'subsample': 0.6, 'colsample_bytree': 0.5, 'gamma': 0, 'reg_alpha': 0, 'reg_lambda': 5, 'n_jobs': 20}
+
+Score : 0.06380429781974763
 --------------------------------------------------

@@ -55,9 +55,13 @@ def train2_lgb(train_data, train_label, pred_data, params, en_amount):
             # 训练模型
             bst = lgb.train(params, train, num_boost_round=10000, valid_sets=valid, verbose_eval=-1,
                             early_stopping_rounds=50)
-            pred += bst.predict(pred_data, num_iteration=bst.best_iteration)
+            bst = lgb.LGBMRegressor(**params)
+            bst.fit(X_train, label_train, eval_metric=mean_absolute_error)
+            pred += bst.predict(pred_data)
+            valid_best_all += mean_absolute_error(label_validate, bst.predict(X_validate))
+            # pred += bst.predict(pred_data, num_iteration=bst.best_iteration)
             # bst.best_score example : {'valid_0': {'l1': 14.744103789371326}}
-            valid_best_all += bst.best_score['valid_0']['l1']
+            #valid_best_all += bst.best_score['valid_0']['l1']
             count += 1
         pred /= NFOLDS
         valid_best_all /= NFOLDS

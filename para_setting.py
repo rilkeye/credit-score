@@ -25,7 +25,7 @@ from sklearn.model_selection import ShuffleSplit
     'bagging_fraction': 0.01,
     'lambda_l1': 0.01, 
     'lambda_l2': 0.5,
-    'max_bin': 381
+    'max_bin': 383
 }
 
 '''
@@ -42,24 +42,26 @@ train_dataset = train_dataset.drop(columns=['用户编码', '信用分'])
 params = {
         'boosting_type': 'gbdt',
         'objective': 'regression_l1',
-        'n_estimators': 10000,  # base :
+        'n_estimators': 2538,
         'metric': 'mae',
-        'learning_rate': 0.01,  # base : 0.01~0.02
-        'min_child_samples': 46,  # base : 30~50
-        'min_child_weight': 0.01, # base :
+        'learning_rate': 0.01,
+        'min_child_samples': 46,
+        'min_child_weight': 0.01,
         'bagging_freq': 2,
-        'num_leaves': 40,
+        'num_leaves': 90,
         'max_depth': 7,
         'bagging_fraction': 0.6,
-        'feature_fraction': 0.8,
-        'lambda_l1': 0,
-        'lambda_l2': 5,
+        'feature_fraction': 0.4,
+        'lambda_l1': 0.01,
+        'lambda_l2': 0.55,
+        'max_bin': 383,
         'verbose': -1,
         'bagging_seed': 4590
     }
 
-param_range = range(1000, 10000, 1000)
-para_name = 'n_estimators'
+'''
+param_range = np.linspace(.0, 10, 20)
+para_name = 'lambda_l2'
 
 dtrain = lgb.Dataset(train_dataset, train_label)
 gbm = lgb.LGBMRegressor()
@@ -84,6 +86,8 @@ plt.legend(loc='best')
 # plt.semilogx(param_range, train_scores_mean, label='training score', color='r')
 # plt.semilogx(param_range, test_scores_mean, label='cross-validation score', color='g')
 plt.show()
+'''
+
 
 '''
 # --------------------------------------------------------------
@@ -95,95 +99,85 @@ print(cv_results)
 print('best n_estimators:', len(cv_results['l1-mean']))
 print('best cv score:', cv_results['l1-mean'][-1])
 # -------------------------------------------------------------
-# best n_estimators: 2561
+# best n_estimators: 2538
+# best_score : 14.695299624701544
 '''
 
 '''
 # -------------------------------------------------------------
-model_lgb = lgb.LGBMRegressor(objective='regression', num_leaves=32,
-                              learning_rate=0.01, n_estimators=1655, max_depth=5,
-                              metric='regression_l1', bagging_fraction=0.6, feature_fraction=0.5)
+model_lgb = lgb.LGBMRegressor(**params)
+
 params_test1={
-    'max_depth': [5], # range(4,8,1),
-    'num_leaves': [20]# range(30, 120, 10)
+    'max_depth': [7],  # range(4,9,1),
+    'num_leaves': range(60, 120, 10)  # range(30, 120, 10)
 }
 gsearch1 = GridSearchCV(estimator=model_lgb, param_grid=params_test1, scoring='neg_mean_absolute_error', cv=5, verbose=1, n_jobs=4)
 gsearch1.fit(train_dataset, train_label)
 print(gsearch1.cv_results_, gsearch1.best_params_, gsearch1.best_score_)
 # -------------------------------------------------------------
-# 'max_depth': 7, 'num_leaves': 70
-# best_score : -14.713925782407046
+# 'max_depth': 7, 'num_leaves': 90
+# best_score : -14.680602460767274
 '''
 
 '''
 # -------------------------------------------------------------
-model_lgb = lgb.LGBMRegressor(objective='regression', num_leaves=32,
-                              learning_rate=0.01, n_estimators=1655, max_depth=5,
-                              metric='regression_l1', bagging_fraction=0.6, feature_fraction=0.5)
-params_test2={
-    'max_depth': range(6,9,1),
-    'num_leaves':range(65, 76)
+model_lgb = lgb.LGBMRegressor(**params)
+params_test2 = {
+    'bagging_freq': range(1, 11)
 }
 gsearch1 = GridSearchCV(estimator=model_lgb, param_grid=params_test2, scoring='neg_mean_absolute_error', cv=5, verbose=1, n_jobs=4)
 gsearch1.fit(train_dataset, train_label)
 print(gsearch1.cv_results_, gsearch1.best_params_, gsearch1.best_score_)
 # -------------------------------------------------------------
-# 'max_depth': 7, 'num_leaves': 66
-# best_score : -14.710041112943099
+# 'bagging_freq': 2
+# best_score : -14.656274158678205
 '''
 
 '''
 # -------------------------------------------------------------
 params_test3={
-    'min_data_in_leaf': [19, 20, 21, 22],
-    'min_sum_hessian_in_leaf':[0.001, 3.0]
+    'min_child_samples': [19, 20, 21, 22, 45, 46, 47],
+    'min_child_weight': [0.01, 0.1, 0.5]
 }
-model_lgb = lgb.LGBMRegressor(objective='regression',num_leaves=66,
-                              learning_rate=0.01, n_estimators=1655, max_depth=7,
-                              metric='regression_l1', bagging_fraction = 0.6, feature_fraction = 0.5)
+model_lgb = lgb.LGBMRegressor(**params)
 gsearch3 = GridSearchCV(estimator=model_lgb, param_grid=params_test3, scoring='neg_mean_absolute_error', cv=5, verbose=1, n_jobs=4)
 gsearch3.fit(train_dataset, train_label)
 print(gsearch3.cv_results_, gsearch3.best_params_, gsearch3.best_score_)
 # -------------------------------------------------------------
-# 'min_data_in_leaf': 20, 'min_sum_hessian_in_leaf': 0.001
-# best_score :-14.710041112943099
+# 'min_data_in_leaf': 46, 'min_sum_hessian_in_leaf': 0.01
+# best_score :-14.680602460767274
 '''
-
 
 '''
 # -------------------------------------------------------------
 params_test4={
-    'feature_fraction': [0.5],
-    'bagging_fraction':[0.01, 0.03, 0.04]
+    'feature_fraction': [0.4],
+    'bagging_fraction': [0.5, 0.6, 0.7, 0.8]
 }
-model_lgb = lgb.LGBMRegressor(objective='regression',num_leaves=66,
-                              learning_rate=0.01, n_estimators=1655, max_depth=7, min_data_in_leaf=20, min_sum_hessian_in_leaf=0.001,
-                              metric='regression_l1', bagging_fraction = 0.6, feature_fraction = 0.5)
+model_lgb = lgb.LGBMRegressor(**params)
 gsearch4 = GridSearchCV(estimator=model_lgb, param_grid=params_test4, scoring='neg_mean_absolute_error', cv=5, verbose=1, n_jobs=4)
 gsearch4.fit(train_dataset, train_label)
 print(gsearch4.cv_results_, gsearch4.best_params_, gsearch4.best_score_)
 # -------------------------------------------------------------
-# 'feature_fraction': 0.5, 'bagging_fraction': 0.01
-# best_score :-14.710041112943099
+# 'feature_fraction': 0.4, 'bagging_fraction': 0.6
+# best_score :-14.663373377652112
 '''
 
 '''
 params_test5={
-    'lambda_l1': [0.01, 0.1, 0.5],
-    'lambda_l2': [0.45, 0.5, 0.55]
+    'lambda_l1': [0.001, 0.01, 0.05],
+    'lambda_l2': [0.55, 0.6]
 }
-model_lgb = lgb.LGBMRegressor(objective='regression',num_leaves=66,
-                              learning_rate=0.01, n_estimators=1655, max_depth=7,min_data_in_leaf=19, min_sum_hessian_in_leaf=0.001,
-                              metric='regression_l1', bagging_fraction = 0.01, feature_fraction = 0.5)
+model_lgb = lgb.LGBMRegressor(**params)
 gsearch5 = GridSearchCV(estimator=model_lgb, param_grid=params_test5, scoring='neg_mean_absolute_error', cv=5, verbose=1, n_jobs=4)
 gsearch5.fit(train_dataset, train_label)
 print(gsearch5.cv_results_, gsearch5.best_params_, gsearch5.best_score_)
 # -------------------------------------------------------------
-# 'lambda_l1': 0.01, 'lambda_l2': 0.5
-# best_score : -14.710015134819564
+# 'lambda_l1': 0.01, 'lambda_l2': 0.55
+# best_score : -14.659112875263993
 '''
 
-
+'''
 # set new params
 params = {
               'n_estimators': 1655,
@@ -196,6 +190,7 @@ params = {
               'lambda_l1': 0.01,
               'lambda_l2': 0.5
               }
+'''
 
 '''
 # -------------------------------------------------------------
@@ -206,23 +201,21 @@ cv_results = lgb.cv(
 
 print('best n_estimators:', len(cv_results['l1-mean']))
 print('best cv score:', cv_results['l1-mean'][-1])
-# best n_estimators: 152
-# best cv score: 14.855494695121404
+# best n_estimators: 2806
+# best cv score: 14.88031659859046
 # -------------------------------------------------------------
 '''
 
 '''
 # -------------------------------------------------------------
 params_test6={
-    'max_bin':range(375, 386, 1)
+    'max_bin': range(375, 386, 1)
 }
-model_lgb = lgb.LGBMRegressor(objective='regression', num_leaves=66,
-                              learning_rate=0.01, n_estimators=1655, max_depth=7,min_data_in_leaf=20, min_sum_hessian_in_leaf=0.001,
-                              metric='regression_l1', bagging_fraction=0.01, feature_fraction=0.5, lambda_l1=0.01, lambda_l2=0.5)
+model_lgb = lgb.LGBMRegressor(**params)
 gsearch6 = GridSearchCV(estimator=model_lgb, param_grid=params_test6, scoring='neg_mean_absolute_error', cv=5, verbose=1, n_jobs=4)
 gsearch6.fit(train_dataset, train_label)
 print(gsearch6.cv_results_, gsearch6.best_params_, gsearch6.best_score_)
-# 'max_bin': 381
-# best cv score:-14.714731203914459
+# 'max_bin': 383
+# best cv score:-14.656274158678205
 # -------------------------------------------------------------
 '''
