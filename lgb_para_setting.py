@@ -13,22 +13,6 @@ from sklearn.model_selection import learning_curve
 from sklearn.model_selection import validation_curve
 from sklearn.model_selection import ShuffleSplit
 
-'''
-# We had run this .py file getting the best parameters:
-{
-    'n_estimators': 1655,
-    'max_depth': 7, 
-    'num_leaves': 66,
-    'min_data_in_leaf': 20,
-    'min_sum_hessian_in_leaf': 0.001,
-    'feature_fraction': 0.5, 
-    'bagging_fraction': 0.01,
-    'lambda_l1': 0.01, 
-    'lambda_l2': 0.5,
-    'max_bin': 383
-}
-
-'''
 
 train_dataset_path = 'data/train_dataset.csv'
 

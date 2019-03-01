@@ -5,6 +5,7 @@
 import numpy as np
 import pandas as pd
 import csv
+import time
 from sklearn.preprocessing import OneHotEncoder
 
 
@@ -39,6 +40,8 @@ def one_hot(df, feature):
     df = pd.concat([df, tmpdata], axis=1)
     return df
 
+def timer():
+    return time.time()
 
 def processed_df(df):
     '''
