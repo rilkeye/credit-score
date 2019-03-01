@@ -54,3 +54,8 @@
     新增main3.py文件，负责模型ensemble实现，框架已搭建尚未调试，线上线下得分均不足
     main2文件已更新为lgb+xgb的bagging，权重为0.3，0.3，0.4，且作参数调整，线上评分0.06386029000，作为新阶段baseline。（该训练耗时极长）
     CVfunction_parameters_setting.py；para_setting分别为cv函数调参法和gridsearch调参法，目前这两种方法实际调参效果无效，原因不明。
+### version 5.1更新时间2019年3月1日22:33:33
+    修正了train.py文件中lgb框架的使用方法，lgb_para_setting.py函数调参文件已经可用并验证有效（使用方法询问yzc）  
+    已完成lgb的粗调参  
+    为特征新增了one-hot编码功能，并增加了4类one-hot特征  
+    目前main2效果为best，线上评分0.06388384000
