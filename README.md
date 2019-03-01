@@ -50,3 +50,7 @@
     main.py文件与main2.py相互独立，main与main2共享train、processed_dataframe、utils等函数，main耗时短但精度低，设置可预测得分的测试集，  
     适合用于平时调整特征工程时使用。  
 在此特别感谢[Venn](https://github.com/wangvenn/Credit-Scoring-Regression)的baseline开源。
+## version 5.0更新时间2019年2月27日07:26:40
+    新增main3.py文件，负责模型ensemble实现，框架已搭建尚未调试，线上线下得分均不足
+    main2文件已更新为lgb+xgb的bagging，权重为0.3，0.3，0.4，且作参数调整，线上评分0.06386029000，作为新阶段baseline。（该训练耗时极长）
+    CVfunction_parameters_setting.py；para_setting分别为cv函数调参法和gridsearch调参法，目前这两种方法实际调参效果无效，原因不明。
