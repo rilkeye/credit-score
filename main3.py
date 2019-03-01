@@ -86,5 +86,5 @@ submition.columns = ['id','score']
 submition.to_csv('data/submition2.csv', header=True, index=False)
 
 # 将训练参数、模型保存路径和模型得分写入日志文件
-utils.write_log(save_path='training log.txt', Time=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),
+utils.write_log(save_path='training_log.txt', Time=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),
                 TrainMethod='main3', Params=params, Score=score)
