@@ -29,7 +29,7 @@ train_dataset = utils.processed_df(train_dataset)
 pred_dataset  = utils.processed_df(pred_dataset)
 
 # lgb params
-params = {
+lgb_params = {
         'boosting_type': 'gbdt',
         'objective': 'regression_l1',
         'n_estimators': 2538,
@@ -48,6 +48,9 @@ params = {
         'verbose': -1,
         'bagging_seed': 4590
     }
+xgb_params = {'learning_rate': 0.003, 'n_estimators': 8000, 'max_depth': 6, 'min_child_weight': 10, 'seed': 0,
+              'subsample': 0.6, 'colsample_bytree': 0.5, 'gamma': 0, 'reg_alpha': 0, 'reg_lambda': 5, 'n_jobs': 20}
+
 
 train_data1, train_data2 = train_test_split(train_dataset, test_size=0.2, random_state=21)
 train_data1, train_data2 = train_data1.reset_index(), train_data2.reset_index()

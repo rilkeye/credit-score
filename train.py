@@ -132,7 +132,7 @@ def train3_lgb(train_data, train_label, train_data2, pred_data, params):
     return train2_pred, pred, valid_best_all
 
 
-def train3_xgb(train_data, train_label, train2_data, pred_data):
+def train3_xgb(train_data, train_label, train2_data, pred_data, params):
     t0 = utils.timer()
     NFOLDS = 5
     kfold = StratifiedKFold(n_splits=NFOLDS, shuffle=True, random_state=2019)
@@ -149,8 +149,6 @@ def train3_xgb(train_data, train_label, train2_data, pred_data):
         x_train, x_validate, label_train, label_validata = train_data.iloc[train_index, :], train_data.iloc[val_index, :], \
                                          train_label[train_index], train_label[val_index]
         # train
-        params = {'learning_rate': 0.003, 'n_estimators': 8000, 'max_depth': 6, 'min_child_weight': 10, 'seed': 0,
-                  'subsample': 0.6, 'colsample_bytree': 0.5, 'gamma': 0, 'reg_alpha': 0, 'reg_lambda': 5, 'n_jobs': 20}
         model = xgb.XGBRegressor(**params)
         model.fit(x_train, label_train, eval_metric=mean_absolute_error)
 
