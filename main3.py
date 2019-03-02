@@ -37,7 +37,7 @@ lgb_params = {
         'min_child_samples': 46,
         'min_child_weight': 0.01,
         'bagging_freq': 2,
-        'num_leaves': 90,
+        'num_leaves': 86,
         'max_depth': 7,
         'bagging_fraction': 0.6,
         'feature_fraction': 0.4,
