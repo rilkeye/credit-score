@@ -29,14 +29,15 @@ train_dataset = train_dataset.drop(columns=['用户编码', '信用分'])
 
 # old params
 params = {'learning_rate': 0.003, 'n_estimators': 8000, 'max_depth': 6, 'min_child_weight': 10, 'seed': 0,
-              'subsample': 0.6, 'colsample_bytree': 0.5, 'gamma': 0, 'reg_alpha': 0, 'reg_lambda': 5, 'n_jobs': 20}
+          'subsample': 0.6, 'colsample_bytree': 0.5, 'gamma': 0, 'reg_alpha': 0, 'reg_lambda': 5, 'n_jobs': 20}
+# max_delta_step : int ;
 
 '''
-param_range = np.linspace(.0, 10, 20)
-para_name = 'lambda_l2'
+param_range = np.linspace(0.001, 0.01, 10)
+para_name = 'learning_rate'
 
 dtrain = lgb.Dataset(train_dataset, train_label)
-gbm = lgb.LGBMRegressor()
+gbm = xgb.XGBRegressor()
 # train_size, train_scores, test_scores = learning_curve(gbm, train_dataset, train_label,
 #                                                        train_sizes=np.linspace(.05, 1., 15), cv=10)
 train_scores, test_scores = validation_curve(gbm, train_dataset, train_label,
@@ -60,12 +61,11 @@ plt.legend(loc='best')
 plt.show()
 '''
 
-
 '''
 # --------------------------------------------------------------
-dtrain = lgb.Dataset(train_dataset, train_label)
-cv_results = lgb.cv(
-    params, dtrain, num_boost_round=10000, nfold=5, stratified=False, shuffle=True, metrics='regression_l1',
+dtrain = xgb.DMatrix(train_dataset, label=train_label)
+cv_results = xgb.cv(
+    params, dtrain, num_boost_round=10000, nfold=5, stratified=False, shuffle=True, metrics='mae',
     early_stopping_rounds=100, verbose_eval=50, show_stdv=True, seed=0)
 print(cv_results) 
 print('best n_estimators:', len(cv_results['l1-mean']))
@@ -73,6 +73,19 @@ print('best cv score:', cv_results['l1-mean'][-1])
 # -------------------------------------------------------------
 # best n_estimators: 2538
 # best_score : 14.695299624701544
+'''
+
+'''
+# -------------------------------------------------------------
+model_lgb = xgb.XGBRegressor(**params)
+
+params_test1={
+    'n_estimators': range(1000, 11000, 1000),  # range(4,9,1),
+}
+gsearch1 = GridSearchCV(estimator=model_lgb, param_grid=params_test1, scoring='neg_mean_absolute_error', cv=5, verbose=1, n_jobs=4)
+gsearch1.fit(train_dataset, train_label)
+print(gsearch1.cv_results_, gsearch1.best_params_, gsearch1.best_score_)
+# -------------------------------------------------------------
 '''
 
 '''

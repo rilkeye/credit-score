@@ -30,7 +30,6 @@ pred_dataset  = utils.processed_df(pred_dataset)
 params = {
     'boosting_type': 'gbdt',
     'objective': 'regression_l1',
-    'n_estimators': 2538,
     'metric': 'mae',
     'learning_rate': 0.01,
     'min_child_samples': 46,

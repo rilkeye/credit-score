@@ -32,7 +32,6 @@ pred_dataset  = utils.processed_df(pred_dataset)
 lgb_params = {
         'boosting_type': 'gbdt',
         'objective': 'regression_l1',
-        'n_estimators': 2538,
         'metric': 'mae',
         'learning_rate': 0.01,
         'min_child_samples': 46,
@@ -66,6 +65,7 @@ print("lgb1 score is: ", 1 / (1 + valid_score1))
 print("xgb2 score is: ", 1 / (1 + valid_score2))
 
 train_pred1, train_pred2 = pd.DataFrame(train_pred1), pd.DataFrame(train_pred2)
+train_label2 = pd.DataFrame(train_label2)
 pred1, pred2 = pred1.reshape(-1, 1), pred2.reshape(-1, 1)
 
 pred3, valid_score3 = train.train3_stacking(train_pred1, train_label2, pred1)
