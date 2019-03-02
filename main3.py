@@ -60,8 +60,8 @@ train_label2 = train_data2['信用分']
 train_data1 = train_data1.drop(columns=['信用分', 'index'])
 train_data2 = train_data2.drop(columns=['信用分', 'index'])
 
-train_pred1, pred1, valid_score1 = train.train3_lgb(train_data1, train_label1, train_data2, pred_dataset, params)
-train_pred2, pred2, valid_score2 = train.train3_xgb(train_data1, train_label1, train_data2, pred_dataset)
+train_pred1, pred1, valid_score1 = train.train3_lgb(train_data1, train_label1, train_data2, pred_dataset, lgb_params)
+train_pred2, pred2, valid_score2 = train.train3_xgb(train_data1, train_label1, train_data2, pred_dataset, xgb_params)
 print("lgb1 score is: ", 1 / (1 + valid_score1))
 print("xgb2 score is: ", 1 / (1 + valid_score2))
 
@@ -91,4 +91,4 @@ submition.to_csv('data/submition2.csv', header=True, index=False)
 
 # 将训练参数、模型保存路径和模型得分写入日志文件
 utils.write_log(save_path='training_log.txt', Time=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())),
-                TrainMethod='main3', Params=params, Score=score)
+                TrainMethod='main3', LGB_Params=lgb_params, XGB_Params=xgb_params, Score=score)
